@@ -44,7 +44,7 @@
 		</div>
 		{!! Form::close() !!}
 	</div>
-	<p>Test</p>
+	<p>Test Test</p>
 
 
 
