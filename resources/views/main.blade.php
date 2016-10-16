@@ -48,7 +48,7 @@
           <ul class="nav navbar-nav navbar-right">
             <li class="{{ Request::is('posts') ? 'active': '' }}"><a href="/posts">আমার লেখাগুলো</a></li>
             <li class="dropdown">
-              <a href="/" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My Account <span class="caret"></span></a>
+              <a href="/" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">আমার একাউন্ট <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="#">Action</a></li>
                 <li><a href="#">Another action</a></li>
