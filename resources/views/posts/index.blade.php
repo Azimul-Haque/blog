@@ -1,6 +1,8 @@
 @extends('main')
 
-@section('title', 'Blog | All Post')
+@section('title')
+	Blog | All Post ({{$posts->currentPage()}}/{{ceil($posts->total()/$posts->perPage())}})
+@endsection
 @section('stylesheet')
 	{!!Html::style('')!!}
 @endsection
@@ -12,7 +14,7 @@
 			<h1>All Posts</h1>
 		</div>
 		<div class="col-md-2">
-			<a href="{{route('posts.create')}}" class="btn btn-primary btn-lg btn-block btn-h1-spacing">Create New Post</a>
+			<a href="{{route('posts.create')}}" class="btn btn-primary btn-lg btn-block btn-h1-spacing">নতুন ব্লগ পোস্ট করুন</a>
 		</div>
 		<div class="col-md-12">
 			<hr>
@@ -26,7 +28,7 @@
 					<tr>
 						<th>#</th>
 						<th>শিরোনাম</th>
-						<th>কলেবর</th>
+						<th>মূল অংশ</th>
 						<th>প্রকাশের তারিখ</th>
 						<th>হালনাগাদের তারিখ</th>
 						<th></th>

@@ -2,6 +2,11 @@
 
 @section('title', 'Blog | Home')
 
+@section('stylesheet')
+  {!!Html::style('css/styles.css')!!}
+@endsection
+
+
 @section('content')
   <div class="row">
         <div class="col-md-12">
@@ -16,37 +21,17 @@
 
       <div class="row">
         <div class="col-md-8">
+        @foreach ($posts as $post)
           <div class="post">
-            <h3>Post Title</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis amet tenetur eum, consequuntur assumenda officiis quidem omnis placeat. Sequi ex fugiat reiciendis at eligendi inventore ad, odio magnam velit doloribus...</p>
-            <a href="#" class="btn btn-primary">Read More</a>
+            <h3>{{ $post->title }}</h3>
+            <h5><strong>লিখেছেনঃ</strong></h5>
+            <p>{{substr($post->body, 0, 1200)}}{{strlen($post->body)>1200 ? "..." : " "}}</p>
+            <a href="#" class="btn btn-primary btn-sm">Read More</a> <span> {{ date('F d, Y | h:i A', strtotime($post->created_at))}}</span>
+            <hr>
           </div>
 
-          <hr>
+        @endforeach
 
-          <div class="post">
-            <h3>Post Title</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis amet tenetur eum, consequuntur assumenda officiis quidem omnis placeat. Sequi ex fugiat reiciendis at eligendi inventore ad, odio magnam velit doloribus...</p>
-            <a href="#" class="btn btn-primary">Read More</a>
-          </div>
-
-          <hr>
-
-          <div class="post">
-            <h3>Post Title</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis amet tenetur eum, consequuntur assumenda officiis quidem omnis placeat. Sequi ex fugiat reiciendis at eligendi inventore ad, odio magnam velit doloribus...</p>
-            <a href="#" class="btn btn-primary">Read More</a>
-          </div>
-
-          <hr>
-
-          <div class="post">
-            <h3>Post Title</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis amet tenetur eum, consequuntur assumenda officiis quidem omnis placeat. Sequi ex fugiat reiciendis at eligendi inventore ad, odio magnam velit doloribus...</p>
-            <a href="#" class="btn btn-primary">Read More</a>
-          </div>
-
-          <hr>
         </div>
 
         <div class="col-md-3 col-md-offset-1">

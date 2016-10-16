@@ -2,7 +2,7 @@
 
 @section('title', 'Blog | View Post')
 @section('stylesheet')
-	{!!Html::style('')!!}
+	{!!Html::style('css/styles.css')!!}
 @endsection
 
 @section('content')
@@ -32,6 +32,11 @@
 					{!! Form::open(['route' => ['posts.destroy', $post->id], 'method'=>'DELETE']) !!}
 						{!! Form::submit('Delete', ['class'=>'btn btn-danger btn-block']) !!}
 					{!! Form::close() !!}	
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						{!! Html::linkRoute('posts.index', '<< Show All Posts', array(), array('class'=>'btn btn-default btn-block btn-h1-spacing')) !!}
 					</div>
 				</div>
 			</div>

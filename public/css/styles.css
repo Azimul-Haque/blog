@@ -5,3 +5,10 @@
 .form-spacing-top{
 	margin-top: 30px;
 }
+
+.left{
+	float: left;
+}
+.right{
+	float: right;
+}
