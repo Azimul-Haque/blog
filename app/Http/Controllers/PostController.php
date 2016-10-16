@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 use App\Http\Requests;
 use App\Post;
@@ -17,8 +18,16 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::orderBy('id', 'desc')
+                                ->where('isDeleted', '!=', '0')
+                                ->paginate(5);
         return view('posts.index')->withPosts($posts);
+
+        //$posts = DB::table('posts')
+                          //  ->where('isDeleted', '!=', '0')
+                          // ->orderBy('id', 'desc')
+                          //  ->paginate(5);
+        //return view('posts.index', ['posts' => $posts]);
     }
 
     /**
@@ -69,8 +78,15 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = Post::find($id);
+        $post = Post::where('id', '=' , $id)
+                            ->where('isDeleted', '!=', '0')
+                            ->first();
         return view('posts.show')->withPost($post);
+        //$post = DB::table('posts')
+          //                  ->where('id', '=' , $id)
+          //                  ->where('isDeleted', '!=', '0')
+          //                  ->first();
+        //return view('posts.show', ['post' => $post]);        
     }
 
     /**
@@ -81,8 +97,16 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        $post = Post::find($id);
+        $post = Post::where('id', '=' , $id)
+                                ->where('isDeleted', '!=', '0')
+                                ->first();
         return view('posts.edit')->withPost($post);
+
+        //$post = DB::table('posts')
+                 //           ->where('id', '=' , $id)
+                 //           ->where('isDeleted', '!=', '0')
+                 //           ->first();
+       // return view('posts.edit', ['post' => $post]);    
     }
 
     /**
@@ -121,6 +145,15 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = Post::find($id);
+
+       $post->isDeleted = '0';
+
+       $post->save();
+
+        Session::flash('success', 'সফলভাবে মূছে ফেল হয়েছে');
+
+        //redirect
+        return redirect()->route('posts.index');
     }
 }
