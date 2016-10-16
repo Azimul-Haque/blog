@@ -39,8 +39,8 @@
 					@foreach ($posts as $post)
 					<tr>
 						<th>{{$post->id}}</th>	
-						<td>{{$post->title}}</td>	
-						<td>{{substr($post->body, 0, 60)}}{{strlen($post->body)>60 ? "..." : " "}}</td>	
+						<td class="postTitle">{{$post->title}}</td>	
+						<td class="postBody">{{substr($post->body, 0, 60)}}{{strlen($post->body)>60 ? "..." : " "}}</td>	
 						<td>{{ date('F d, Y h:i A', strtotime($post->created_at))}}</td>	
 						<td>{{ date('F d, Y h:i A', strtotime($post->updated_at))}}</td>	
 						<td><a href="{{route('posts.show', $post->id)}}" class="btn btn-default btn-block">View</a></td>	

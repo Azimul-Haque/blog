@@ -9,18 +9,22 @@
 
 	<div class="row">
 		<div class="col-md-8">
-			<h1>{{ $post->title}}</h1>
-			<p class="lead">{{ $post->body}}</p>
+			<h1 class="postTitle">{{ $post->title}}</h1>
+			<p class="lead postBody">{{ $post->body}}</p>
 		</div>
 		<div class="col-md-4">
 			<div class="well">
 				<dl class="dl-horizontal">
-					<dt>Created at</dt>
-					<dd>{{ date('F d, Y h:i A', strtotime($post->created_at))}}</dd>
+					<label>URL</label>
+					<p> <a href="{{ url('article/'.$post->slug) }}">{{ url('article/'.$post->slug) }}</a> </p>
 				</dl>
 				<dl class="dl-horizontal">
-					<dt>Last updated</dt>
-					<dd>{{ date('F d, Y h:i A', strtotime($post->updated_at))}}</dd>
+					<label>Created at</label>
+					<p>{{ date('F d, Y h:i A', strtotime($post->created_at))}}</p>
+				</dl>
+				<dl class="dl-horizontal">
+					<label>Last updated</label>
+					<p>{{ date('F d, Y h:i A', strtotime($post->updated_at))}}</p>
 				</dl>
 				<hr>
 				<div class="row">

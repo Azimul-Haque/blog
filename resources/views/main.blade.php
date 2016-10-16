@@ -13,6 +13,16 @@
     {!!Html::style('css/styles.css')!!}
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <style type="text/css">
+        @font-face {
+        font-family: MyAdorshoLipi;
+        src: url(fonts/AdorshoLipi.ttf);
+        }
+        @font-face {
+            font-family: MyLato;
+            src: url(fonts/Lato-Regular.ttf);
+        }
+    </style>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -46,15 +56,14 @@
             <li class="{{ Request::is('contact') ? 'active': '' }}"><a href="/contact">যোগাযোগ</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li class="{{ Request::is('posts') ? 'active': '' }}"><a href="/posts">আমার লেখাগুলো</a></li>
             <li class="dropdown">
               <a href="/" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">আমার একাউন্ট <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li><a href="#">Action</a></li>
+                <li class="{{ Request::is('posts') ? 'active': '' }}"><a href="/posts">আমার লেখাগুলো</a></li>
                 <li><a href="#">Another action</a></li>
                 <li><a href="#">Something else here</a></li>
                 <li role="separator" class="divider"></li>
-                <li><a href="#">Separated link</a></li>
+                <li><a href="#">Log out</a></li>
               </ul>
             </li>
           </ul>
@@ -70,6 +79,13 @@
 
     </div>
     <!-- end of .container -->
+
+    <div class="footer">
+      <div class="container">
+        <hr>
+        <p class="text-muted text-center">&copy; {{date('Y')}} Copyright Reserved, Blog Humans of Thakurgaon</p>
+      </div>
+  </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>

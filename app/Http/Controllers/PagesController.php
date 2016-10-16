@@ -9,8 +9,7 @@ class PagesController extends Controller {
 	public function getIndex() {
 		$posts = Post::orderBy('created_at', 'desc')
                                 ->where('isDeleted', '!=', '0')
-                                ->limit(5)
-                                ->get();
+                                ->paginate(5); // it will be 15
         return view('pages.welcome')->withPosts($posts);
 	}  
 
