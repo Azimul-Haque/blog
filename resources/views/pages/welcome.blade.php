@@ -24,7 +24,7 @@
         @foreach ($posts as $post)
           <div class="post">
             <h3 class="postTitle">{{ $post->title }}</h3>
-            <h5><strong>লিখেছেনঃ</strong> 'লেখকের নাম' | <span> {{ date('F d, Y | h:i A', strtotime($post->created_at))}}</span></h5>
+            <h5><strong>লিখেছেনঃ</strong> {{ $post->postedBy }} | <span> {{ date('F d, Y | h:i A', strtotime($post->created_at))}}</span></h5>
             <p class="postBody">{{substr($post->body, 0, 1200)}}{{strlen($post->body)>1200 ? "..." : " "}}</p>
             <a href="{{url('article/'.$post->slug)}}" class="btn btn-primary btn-sm">Read More</a> 
             <hr>

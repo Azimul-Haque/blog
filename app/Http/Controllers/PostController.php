@@ -7,10 +7,15 @@ use Illuminate\Support\Facades\DB;
 
 use App\Http\Requests;
 use App\Post;
-use Validator, Input, Redirect, Session; 
+use Validator, Input, Redirect, Session;
+use Auth;
 
 class PostController extends Controller
 {
+    
+    public function __construct(){
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -20,6 +25,7 @@ class PostController extends Controller
     {
         $posts = Post::orderBy('id', 'desc')
                                 ->where('isDeleted', '!=', '0')
+                                ->where('postedBy', '=', Auth::user()->name)
                                 ->paginate(5);
         return view('posts.index')->withPosts($posts);
 
@@ -61,6 +67,7 @@ class PostController extends Controller
         $post = new Post;
 
         $post->title = $request->title;
+        $post->postedBy = Auth::user()->name;
         $post->slug = $request->slug;
         $post->body = $request->body;
 
@@ -82,6 +89,7 @@ class PostController extends Controller
     {
         $post = Post::where('id', '=' , $id)
                             ->where('isDeleted', '!=', '0')
+                            ->where('postedBy', '=', Auth::user()->name)
                             ->first();
         return view('posts.show')->withPost($post);
         //$post = DB::table('posts')
@@ -101,6 +109,7 @@ class PostController extends Controller
     {
         $post = Post::where('id', '=' , $id)
                                 ->where('isDeleted', '!=', '0')
+                                ->where('postedBy', '=', Auth::user()->name)
                                 ->first();
         return view('posts.edit')->withPost($post);
 
@@ -167,5 +176,9 @@ class PostController extends Controller
 
         //redirect
         return redirect()->route('posts.index');
+    }
+
+    public function getProfile() {
+        return view('posts.profile');
     }
 }

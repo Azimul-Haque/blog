@@ -56,16 +56,28 @@
             <li class="{{ Request::is('contact') ? 'active': '' }}"><a href="/contact">যোগাযোগ</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
+            @if(Auth::check())
+                
             <li class="dropdown">
               <a href="/" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">আমার একাউন্ট <span class="caret"></span></a>
               <ul class="dropdown-menu">
+                <li><a href="/profile">{{Auth::user()->name}}</a></li>
                 <li class="{{ Request::is('posts') ? 'active': '' }}"><a href="/posts">আমার লেখাগুলো</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
+                <li><a href="{{ route('categories.index') }}">ক্যাটাগরি</a></li>
                 <li role="separator" class="divider"></li>
-                <li><a href="#">Log out</a></li>
+                <li><a href="{{ route('logout') }}">লগ আউট</a></li>
               </ul>
             </li>
+            @else
+            <li class="dropdown">
+              <a href="/" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ব্লগ লিখুন <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="{{ route('login') }}" class="">লগ ইন করুন</a></li>
+                <li><a href="{{ route('register') }}" class="">রেজিস্টার করুন</a></li>
+              </ul>
+            </li>
+              
+            @endif
           </ul>
         </div>
         <!-- /.navbar-collapse -->

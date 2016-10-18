@@ -10,8 +10,10 @@
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">
 			<h1 class="postTitle">{{ $post->title}}</h1>
-			<h5><strong>লিখেছেনঃ</strong> 'লেখকের নাম' | <span> {{ date('F d, Y | h:i A', strtotime($post->created_at))}}</span></h5>
+			<h5><strong>লিখেছেনঃ</strong> {{ $post->postedBy }} | <span> {{ date('F d, Y | h:i A', strtotime($post->created_at))}}</span></h5>
 			<p class="lead postBody">{{ $post->body}}</p>
+			<hr>
+			<p>বিষয়ঃ {{ $post->category->name }}</p>
 		</div>
 	</div>
 

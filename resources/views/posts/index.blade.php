@@ -11,7 +11,7 @@
 
 	<div class="row">
 		<div class="col-md-10">
-			<h1>All Posts</h1>
+			<h1>সকল পোস্ট</h1>
 		</div>
 		<div class="col-md-2">
 			<a href="{{route('posts.create')}}" class="btn btn-primary btn-lg btn-block btn-h1-spacing">নতুন ব্লগ পোস্ট করুন</a>
@@ -36,6 +36,12 @@
 					</tr>
 				</thead>
 				<tbody>
+
+				@if(count($posts) == '0')
+					<h3>স্বাগতম <strong>{{Auth::user()->name}}</strong>!  আপনি এখনও কোন ব্লগ প্রকাশ করেন নি। ব্লগ লিখুন</h3>
+					<h4>ব্লগের নিয়মকানুন।</h4>
+					<h4>কীভাবে ব্লগ লিখব?</h4>
+				@endif
 					@foreach ($posts as $post)
 					<tr>
 						<th>{{$post->id}}</th>	
