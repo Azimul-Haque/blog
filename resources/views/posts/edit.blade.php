@@ -15,7 +15,11 @@
 			  ],
 			  toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | link image table code preview',
 			  menubar: 'file edit insert view ',
-			  content_css: '//www.tinymce.com/css/codepen.min.css'
+			  content_css: '//www.tinymce.com/css/codepen.min.css',
+			  image_class_list: [
+			    {title: 'Responsive', value: 'img-responsive'}
+			  ],
+     		  image_dimensions: false,
 		});
 	 </script>	
 @endsection

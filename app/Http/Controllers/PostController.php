@@ -12,6 +12,7 @@ use App\Tag;
 use Validator, Input, Redirect, Session;
 use Auth;
 use Purifier;
+use Image;
 
 class PostController extends Controller
 {
@@ -69,7 +70,8 @@ class PostController extends Controller
             'title'       => 'required|max:255',
             'slug'        => 'required|alpha_dash|min:5|max:255|unique:posts,slug',
             'category_id' => 'required|integer',
-            'body'        => 'required'
+            'body'        => 'required',
+            'featured_image'        => 'sometimes|image|max:300'
 
        ));
 
@@ -82,6 +84,20 @@ class PostController extends Controller
         $post->slug = $request->slug;
         $post->category_id = $request->category_id;
         $post->body = Purifier::clean($request->body);
+
+        // image upload
+        if($request->hasFile('featured_image')) {
+            $image      = $request->file('featured_image');
+            $filename   = time(). '.' . $image->getClientOriginalExtension(); 
+            $location   = public_path('images/' . $filename);
+
+            Image::make($image)->resize(800, null, function ($constraint) {
+            $constraint->aspectRatio();
+            })->save($location);
+
+            $post->image = $filename;
+
+        }
 
         $post->save();
 

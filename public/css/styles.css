@@ -83,3 +83,7 @@
     color: #aaa;
     font-weight: bold;
 }
+
+.img-responsive{
+    max-height: 800px;
+}

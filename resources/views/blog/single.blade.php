@@ -12,6 +12,7 @@
 
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">
+			<img class="img-responsive" src="{{ asset('images/'. $post->image) }}">
 			<h1 class="postTitle">{{ $post->title}}</h1>
 			<h5><strong>লিখেছেনঃ</strong> {{ $post->postedBy }} | <span> {{ date('F d, Y | h:i A', strtotime($post->created_at))}} 
 			<i class="diffForHumans">{{ $post->created_at->diffForHumans() }}</i>	
