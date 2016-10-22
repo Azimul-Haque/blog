@@ -30,6 +30,12 @@ Route::get('/article/{slug}', ['as' => 'blog.single', 'uses'=>'BlogController@ge
 Route::get('/', 'PagesController@getIndex');
 Route::get('about', 'PagesController@getAbout');
 Route::get('contact', 'PagesController@getContact');
+Route::post('contact', 'PagesController@postContact');
+
+Route::get('categories/blogs', 'PagesController@getCategoryBased');
+Route::get('tag/{name}', 'PagesController@getCategoryTags');
+Route::get('category/{name}', 'PagesController@getCategoryCategories');
+
 Route::get('profile', 'PostController@getProfile');
 
 // Post controller
@@ -37,6 +43,19 @@ Route::resource('posts', 'PostController');
 
 // Category controller
 Route::resource('categories', 'CategoryController', ['except' => 'create']);
+
+// Tag controller
+Route::resource('tags', 'TagController', ['except' => 'create']);
+
+// Comments controller
+Route::post('comments/{post_id}', ['uses' => 'CommentsController@store', 'as' => 'comments.store']);
+// Super Admin will have these access
+//Route::get('comments/{id}/edit', ['uses' => 'CommentsController@edit', 'as' => 'comments.edit']);
+//Route::put('comments/{id}', ['uses' => 'CommentsController@update', 'as' => 'comments.update']);
+//Route::get('comments/{id}/delete', ['uses' => 'CommentsController@delete', 'as' => 'comments.delete']);
+//Route::delete('comments/{id}', ['uses' => 'CommentsController@destroy', 'as' => 'comments.destroy']);
+Route::get('comments/{id}/report', ['uses' => 'CommentsController@report', 'as' => 'comments.report']);
+Route::put('comments/{id}', ['uses' => 'CommentsController@reportconfirm', 'as' => 'comments.reportconfirm']);
 
 
 

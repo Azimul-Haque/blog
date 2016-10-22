@@ -46,7 +46,9 @@
 					<tr>
 						<th>{{$post->id}}</th>	
 						<td class="postTitle">{{$post->title}}</td>	
-						<td class="postBody">{{substr($post->body, 0, 60)}}{{strlen($post->body)>60 ? "..." : " "}}</td>	
+						<td class="postBody">
+						{{strlen(strip_tags($post->body))>70 ? substr(strip_tags($post->body), 0, strpos(strip_tags($post->body), " ", strpos(strip_tags($post->body), " ")+70))." [...]" : strip_tags($post->body)}}
+						</td>	
 						<td>{{ date('F d, Y h:i A', strtotime($post->created_at))}}</td>	
 						<td>{{ date('F d, Y h:i A', strtotime($post->updated_at))}}</td>	
 						<td><a href="{{route('posts.show', $post->id)}}" class="btn btn-default btn-block">View</a></td>	

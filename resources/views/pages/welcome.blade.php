@@ -24,8 +24,13 @@
         @foreach ($posts as $post)
           <div class="post">
             <h3 class="postTitle">{{ $post->title }}</h3>
-            <h5><strong>লিখেছেনঃ</strong> {{ $post->postedBy }} | <span> {{ date('F d, Y | h:i A', strtotime($post->created_at))}}</span></h5>
-            <p class="postBody">{{substr($post->body, 0, 1200)}}{{strlen($post->body)>1200 ? "..." : " "}}</p>
+            <h5><strong>লিখেছেনঃ</strong> {{ $post->postedBy }} | <span> {{ date('F d, Y | h:i A', strtotime($post->created_at))}}
+            <i class="diffForHumans">{{ $post->created_at->diffForHumans() }}</i>
+            </span></h5>
+            <p class="postBody">
+
+            {!!strlen($post->body)>1200? substr($post->body, 0, strpos($post->body, " ", strpos(strip_tags($post->body), " ")+1200))." [...]" : $post->body!!} 
+            </p>
             <a href="{{url('article/'.$post->slug)}}" class="btn btn-primary btn-sm">Read More</a> 
             <hr>
           </div>

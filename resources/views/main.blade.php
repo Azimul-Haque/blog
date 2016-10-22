@@ -54,6 +54,7 @@
             <li class="{{ Request::is('/') ? 'active': '' }}"><a href="/">নীড় পাতা</a></li>
             <li class="{{ Request::is('about') ? 'active': '' }}"><a href="/about">বৃত্তান্ত</a></li>
             <li class="{{ Request::is('contact') ? 'active': '' }}"><a href="/contact">যোগাযোগ</a></li>
+            <li class="{{ Request::is('categories/blogs') ? 'active': '' }}"><a href="/categories/blogs">বিষয়ভিত্তিক ব্লগ</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             @if(Auth::check())
@@ -64,6 +65,7 @@
                 <li><a href="/profile">{{Auth::user()->name}}</a></li>
                 <li class="{{ Request::is('posts') ? 'active': '' }}"><a href="/posts">আমার লেখাগুলো</a></li>
                 <li><a href="{{ route('categories.index') }}">ক্যাটাগরি</a></li>
+                <li><a href="{{ route('tags.index') }}">সকল ট্যাগ</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a href="{{ route('logout') }}">লগ আউট</a></li>
               </ul>

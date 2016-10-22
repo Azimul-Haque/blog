@@ -1,6 +1,6 @@
 @extends('main')
 
-@section('title', 'Blog | All Categories')
+@section('title', 'Blog | All Tags')
 @section('stylesheet')
 	{!!Html::style('css/parsley.css')!!}
 @endsection
@@ -9,7 +9,7 @@
 
 	<div class="row">
 		<div class="col-md-8">
-			<h1>বিষয়সমূহ</h1>
+			<h1>সকল ট্যাগ</h1>
 			<table class="table">
 				<thead>
 					<tr>
@@ -19,10 +19,10 @@
 				</thead>
 
 				<tbody>
-				@foreach ($categories as $category)
+				@foreach ($tags as $tag)
 					<tr>
-						<th>{{ $category->id }}</th>
-						<th>{{ $category->name }}</th>
+						<th>{{ $tag->id }}</th>
+						<th>{{ $tag->name }}</th>
 					</tr>
 				@endforeach
 				</tbody>
@@ -31,13 +31,13 @@
 		</div>
 		<div class="col-md-4">
 			<div class="well">
-			{!! Form::open(['route' => 'categories.store', 'method' => 'POST', 'data-parsley-validate' => '']) !!}
-				<h2>নতুন বিষয় যোগ করুন</h2>
-			 	{!! Form::label('name', 'বিষয়ের নাম:') !!}
+			{!! Form::open(['route' => 'tags.store', 'method' => 'POST', 'data-parsley-validate' => '']) !!}
+				<h2>নতুন ট্যাগ যোগ করুন</h2>
+			 	{!! Form::label('name', 'ট্যাগ নাম:') !!}
 			 	{!! Form::text('name', null, array('class' => 'form-control', 'required' => '')) !!}
 
 
-			 	{!! Form::submit('বিষয় যোগ করুন', array('class' => 'btn btn-success btn-block', 'style' => 'margin-top:20px;')) !!}
+			 	{!! Form::submit('ট্যাগ যোগ করুন', array('class' => 'btn btn-success btn-block', 'style' => 'margin-top:20px;')) !!}
 			{!! Form::close() !!}
 			</div>
 		</div>

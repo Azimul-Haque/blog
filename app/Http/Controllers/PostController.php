@@ -7,8 +7,11 @@ use Illuminate\Support\Facades\DB;
 
 use App\Http\Requests;
 use App\Post;
+use App\Category;
+use App\Tag;
 use Validator, Input, Redirect, Session;
 use Auth;
+use Purifier;
 
 class PostController extends Controller
 {
@@ -27,7 +30,9 @@ class PostController extends Controller
                                 ->where('isDeleted', '!=', '0')
                                 ->where('postedBy', '=', Auth::user()->name)
                                 ->paginate(5);
-        return view('posts.index')->withPosts($posts);
+        $categories = Category::all();       
+        return view('posts.index')
+                    ->withPosts($posts);
 
         //$posts = DB::table('posts')
                           //  ->where('isDeleted', '!=', '0')
@@ -43,7 +48,12 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('posts.create');
+        $categories = Category::all();
+        $tags = Tag::all();
+
+        return view('posts.create')
+                    ->withCategories($categories)
+                    ->withTags($tags);
     }
 
     /**
@@ -56,9 +66,10 @@ class PostController extends Controller
     {
         //validation
         $this->validate($request, array(
-            'title'=>'required|max:255',
-            'slug'=>'required|alpha_dash|min:5|max:255|unique:posts,slug',
-            'body'=>'required'
+            'title'       => 'required|max:255',
+            'slug'        => 'required|alpha_dash|min:5|max:255|unique:posts,slug',
+            'category_id' => 'required|integer',
+            'body'        => 'required'
 
        ));
 
@@ -69,9 +80,12 @@ class PostController extends Controller
         $post->title = $request->title;
         $post->postedBy = Auth::user()->name;
         $post->slug = $request->slug;
-        $post->body = $request->body;
+        $post->category_id = $request->category_id;
+        $post->body = Purifier::clean($request->body);
 
         $post->save();
+
+        $post->tags()->sync($request->tags, false);
 
         Session::flash('success', 'সফলভাবে পাবলিশ করা হয়েছে');
 
@@ -91,7 +105,9 @@ class PostController extends Controller
                             ->where('isDeleted', '!=', '0')
                             ->where('postedBy', '=', Auth::user()->name)
                             ->first();
-        return view('posts.show')->withPost($post);
+        $categories = Category::all();                    
+        return view('posts.show')
+                    ->withPost($post);
         //$post = DB::table('posts')
           //                  ->where('id', '=' , $id)
           //                  ->where('isDeleted', '!=', '0')
@@ -111,7 +127,22 @@ class PostController extends Controller
                                 ->where('isDeleted', '!=', '0')
                                 ->where('postedBy', '=', Auth::user()->name)
                                 ->first();
-        return view('posts.edit')->withPost($post);
+        $categories = Category::all();
+        $tags = Tag::all();  
+
+        $cats = [];
+        foreach ($categories as $category) {
+            $cats[$category->id] = $category->name;  
+        }
+        
+        $tags2 = [];
+        foreach ($tags as $tag) {
+            $tags2[$tag->id] = $tag->name;  
+        }
+
+        return view('posts.edit')->withPost($post)
+                        ->withCategories($cats)
+                        ->withTags($tags2);
 
         //$post = DB::table('posts')
                  //           ->where('id', '=' , $id)
@@ -135,12 +166,14 @@ class PostController extends Controller
        if($request->input('slug') == $post->slug){
             $this->validate($request, array(
                 'title'=>'required | max:255',
+                'category_id'=>'required | integer',
                 'body'=>'required'
             ));
        } else{
             $this->validate($request, array(
                 'title'=>'required | max:255',
                 'slug'=>'required|alpha_dash|min:5|max:255|unique:posts,slug',
+                'category_id'=>'required | integer',
                 'body'=>'required'
             ));
        }
@@ -148,9 +181,17 @@ class PostController extends Controller
 
        $post->title = $request->input('title');
        $post->slug = $request->input('slug');
-       $post->body = $request->input('body');
+       $post->category_id = $request->input('category_id');
+       $post->body = Purifier::clean($request->input('body'));
 
        $post->save();
+       
+       if(isset($request->tags)){
+            $post->tags()->sync($request->tags, true);
+       }else{
+
+       }
+       
 
         Session::flash('success', 'সফলভাবে হালনাগাদ করা হয়েছে');
 
@@ -168,9 +209,11 @@ class PostController extends Controller
     {
        $post = Post::find($id);
 
+       $post->category_id = '';
        $post->isDeleted = '0';
 
        $post->save();
+       $post->tags()->detach();
 
         Session::flash('success', 'সফলভাবে মূছে ফেল হয়েছে');
 

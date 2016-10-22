@@ -9,25 +9,26 @@ use Validator, Input, Redirect, Session;
 use App\Category;
 use App\Tag;
 
-class CategoryController extends Controller
+class TagController extends Controller
 {
     public function __construct(){
         $this->middleware('auth');
-    }
+    }    
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(){
-        $categories = Category::all();
+    public function index()
+    {
+        $tags = Tag::all();
 
-        return view('categories.index')->withCategories($categories);
+        return view('tags.index')->withTags($tags);
     }
 
     /**
      * Show the form for creating a new resource.
-     * DELETED THE CREATED METHOD
+     * WE DELETED CREATE METHOD
      * @return \Illuminate\Http\Response
      */
 
@@ -39,23 +40,20 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //validation
         $this->validate($request, array(
             'name'=>'required|max:255'
         ));
 
+        $tag = new Tag;
 
-        //store to DB
-        $category = new Category;
+        $tag->name = $request->name;
 
-        $category->name = $request->name;
+        $tag->save();
 
-        $category->save();
-
-        Session::flash('success', 'সফলভাবে নতুন বিষয় যুক্ত হয়েছে');
+        Session::flash('success', 'সফলভাবে নতুন ট্যাগ যুক্ত হয়েছে');
 
         //redirect
-        return redirect()->route('categories.index');
+        return redirect()->route('tags.index');
     }
 
     /**
