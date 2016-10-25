@@ -8,6 +8,7 @@ use Validator, Input, Redirect, Session;
 use App\Post;
 use App\Category;
 use App\Tag;
+use App\User;
 use Mail;
 
 
@@ -17,9 +18,16 @@ class PagesController extends Controller {
 		$posts = Post::orderBy('created_at', 'desc')
                                 ->where('isDeleted', '!=', '0')
                                 ->paginate(5); // it will be 15
+        $populars = Post::orderBy('hits', 'desc')
+                                ->where('isDeleted', '!=', '0')
+                                ->take(10)
+                                ->get();
+
+        
                        
         return view('pages.welcome')
-        			->withPosts($posts);
+        			->withPosts($posts)
+                    ->withPopulars($populars);
 	}  
 
 	public function getAbout() {
@@ -88,6 +96,18 @@ class PagesController extends Controller {
         return view('pages.categories_categories')
         		->withCategory($category)
         		->withCategorylist($categorylist);
+    }
+
+    public function getAuthor($author) {
+        $user = User::where('name', '=', $author)->first();
+        $posts = Post::orderBy('created_at', 'desc')
+                                ->where('postedBy', '=', $author)
+                                ->where('isDeleted', '!=', '0')
+                                ->get(); // it will be 15
+                       
+        return view('pages.author')
+            ->withUser($user)
+            ->withPosts($posts);
     }
 
 }

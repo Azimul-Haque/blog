@@ -12,7 +12,7 @@
 		<div class="col-md-8">
 			<h1 class="postTitle">{{ $post->title}}</h1>
 			<p class="lead postBody">{!! $post->body!!}</p>
-			<hr>
+			<hr>				
 			<div class="tags">
 				
 				<?php
@@ -25,6 +25,7 @@
 					<span class="label label-{{$labels[$i]}}">{{ $tag->name }}</span>
 					<?php $i++?>
 				@endforeach
+				<span>[{{ $post->hits }} বার পঠিত]</span>
 			</div>
 			<div class="backend-comments" style="margin-top: 40px;">
 				<h3>কমেন্ট: <small>মোট {{ $post->comments()->count() }} টি কমেন্ট</small></h3>

@@ -11,7 +11,9 @@
 		<div class="col-md-8">
 			@foreach($category->posts()->orderBy('id', 'desc')->get() as $post)
 				<h3 class="postTitle">{{ $post->title }}</h3>
-	            <h5><strong>লিখেছেনঃ</strong> {{ $post->postedBy }} | <span> {{ date('F d, Y | h:i A', strtotime($post->created_at))}}
+	            <h5><strong>লিখেছেনঃ</strong> 
+	            <a href="{{url('profile/'.$post->postedBy)}}" class="">{{ $post->postedBy }} </a>
+	            | <span> {{ date('F d, Y | h:i A', strtotime($post->created_at))}}
 					<i class="diffForHumans">{{ $post->created_at->diffForHumans() }}</i>
 	            </span></h5>
 	            <p class="postBody">

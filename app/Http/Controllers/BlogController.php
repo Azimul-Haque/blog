@@ -13,6 +13,9 @@ class BlogController extends Controller
     public function getSingle($slug) {
     	$post = Post::where('slug','=',$slug)->first();
 
+    	$post->hits = $post->hits + 1;
+
+        $post->save();
 
     	return view('blog.single')
     		->withPost($post);

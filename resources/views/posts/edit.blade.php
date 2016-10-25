@@ -43,7 +43,7 @@
 			 	{{ Form::select('tags[]', $tags, null, ['class' => 'form-control select2-multi', 'multiple' => 'multiple', 'required' => '']) }}
 
 				{{ Form::label('body', 'Body', ['class'=>'form-spacing-top']) }}
-				{{ Form::textarea('body', null,['class'=>'form-control postBody']) }}
+				{{ Form::textarea('body', null,['class'=>'form-control postBody', 'minlength' => '100']) }}
 			
 		</div>
 		<div class="col-md-4">

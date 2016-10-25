@@ -58,6 +58,18 @@
             <li class="{{ Request::is('categories/blogs') ? 'active': '' }}"><a href="/categories/blogs">বিষয়ভিত্তিক ব্লগ</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
+            
+            @if(Auth::check() && Auth::user()->role == 'admin')
+            <li class="dropdown">
+              <a href="/" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">সুপার এডমিন <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li class="{{ Request::is('superadmin/bloggers') ? 'active': '' }}"><a href="/superadmin/bloggers">ব্লগারদের তালিকা</a></li>
+                <li><a href="{{ route('categories.index') }}">ক্যাটাগরি</a></li>
+              </ul>
+            </li>
+            @else
+            @endif
+
             @if(Auth::check())
                 
             <li class="dropdown">
@@ -79,7 +91,6 @@
                 <li><a href="{{ route('register') }}" class="">রেজিস্টার করুন</a></li>
               </ul>
             </li>
-              
             @endif
           </ul>
         </div>

@@ -2,7 +2,11 @@
 
 .postTitle{
     font-family:MyAdorshoLipi;sans-serif !important;
+
 }
+.postTitle:visited { text-decoration: none; }
+.postTitle:hover { text-decoration: none; }
+
 .postSlug{
     font-family:MyAdorshoLipi;sans-serif !important;
 }

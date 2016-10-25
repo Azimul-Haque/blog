@@ -31,11 +31,11 @@ Route::get('/', 'PagesController@getIndex');
 Route::get('about', 'PagesController@getAbout');
 Route::get('contact', 'PagesController@getContact');
 Route::post('contact', 'PagesController@postContact');
+Route::get('profile/{author}', ['as' => 'pages.author', 'uses'=>'PagesController@getAuthor']);
 
 Route::get('categories/blogs', 'PagesController@getCategoryBased');
 Route::get('tag/{name}', 'PagesController@getCategoryTags');
 Route::get('category/{name}', 'PagesController@getCategoryCategories');
-
 Route::get('profile', 'PostController@getProfile');
 
 // Post controller
@@ -57,5 +57,8 @@ Route::post('comments/{post_id}', ['uses' => 'CommentsController@store', 'as' =>
 Route::get('comments/{id}/report', ['uses' => 'CommentsController@report', 'as' => 'comments.report']);
 Route::put('comments/{id}', ['uses' => 'CommentsController@reportconfirm', 'as' => 'comments.reportconfirm']);
 
+// Super Admin 
 
+
+Route::get('superadmin/bloggers', ['uses' => 'PostController@getBloggersList', 'as' => 'posts.bloggerlist']);
 

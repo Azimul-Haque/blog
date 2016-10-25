@@ -9,13 +9,14 @@ use App\Http\Requests;
 use App\Post;
 use App\Category;
 use App\Tag;
+use App\User;
 use Validator, Input, Redirect, Session;
 use Auth;
 use Purifier;
 use Image;
 
-class PostController extends Controller
-{
+
+class PostController extends Controller {
     
     public function __construct(){
         $this->middleware('auth');
@@ -31,7 +32,8 @@ class PostController extends Controller
                                 ->where('isDeleted', '!=', '0')
                                 ->where('postedBy', '=', Auth::user()->name)
                                 ->paginate(5);
-        $categories = Category::all();       
+        $categories = Category::all();     
+
         return view('posts.index')
                     ->withPosts($posts);
 
@@ -240,4 +242,17 @@ class PostController extends Controller
     public function getProfile() {
         return view('posts.profile');
     }
+
+    public function getBloggersList() {
+        $users = User::orderBy('id', 'desc')->get();
+        $posts = Post::orderBy('created_at', 'desc')
+                                ->where('isDeleted', '!=', '0')
+                                ->get(); // it will be 15
+
+        return view('posts.bloggerlist')
+                    ->withUsers($users)
+                    ->withPosts($posts);
+    }
+
+    
 }

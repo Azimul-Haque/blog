@@ -54,10 +54,10 @@
 			 	</select>
 			 	
 				{!! Form::label('featured_image', 'Upload Image: (within 300KB)', ['class' => 'form-spacing-top']) !!}
-				{!! Form::file('featured_image', ['data-parsley-filemaxmegabytes' => '10', 'data-parsley-trigger' => 'change', 'data-parsley-filemimetypes' => 'image/jpeg, image/png']) !!}
+				{!! Form::file('featured_image', ['data-parsley-filemaxmegabytes' => '0.3', 'data-parsley-trigger' => 'change', 'data-parsley-filemimetypes' => 'image/jpeg, image/png']) !!}
 				
 			 	{!! Form::label('body', 'Body:', array('class' => 'form-spacing-top')) !!}
-			 	{!! Form::textarea('body', null, array('class' => 'form-control')) !!}
+			 	{!! Form::textarea('body', null, array('class' => 'form-control','minlength' => '100')) !!}
 
 			 	{!! Form::submit('Create Post', array('class' => 'btn btn-success btn-block', 'style' => 'margin-top:20px;')) !!}
 			{!! Form::close() !!}

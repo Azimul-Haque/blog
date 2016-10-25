@@ -14,7 +14,9 @@
 		<div class="col-md-8 col-md-offset-2">
 			<img class="img-responsive" src="{{ asset('images/'. $post->image) }}">
 			<h1 class="postTitle">{{ $post->title}}</h1>
-			<h5><strong>লিখেছেনঃ</strong> {{ $post->postedBy }} | <span> {{ date('F d, Y | h:i A', strtotime($post->created_at))}} 
+			<h5><strong>লিখেছেনঃ</strong> 
+			<a href="{{url('profile/'.$post->postedBy)}}" class="">{{ $post->postedBy }} </a>
+			| <span> {{ date('F d, Y | h:i A', strtotime($post->created_at))}} 
 			<i class="diffForHumans">{{ $post->created_at->diffForHumans() }}</i>	
 			</span></h5>
 			<p class="lead postBody">
@@ -29,10 +31,11 @@
 					$i = 1;
 				?>
 				@foreach ($post->tags as $tag)
-					<a class="label label-{{$labels[$i]}}" href="/tag/{{$tag->name}}">{{ $tag->name }}
+					<a class="label label-{{$labels[$i]}}" href="/tag/{{$tag->name}}">{{ $tag->name }} 
 						</a>
 					<?php $i++?>
-				@endforeach
+				@endforeach 
+				 <span style="margin-left: 5px;">[{{ $post->hits }} বার পঠিত]</span>
 			</span>
 		</div>
 	</div>
