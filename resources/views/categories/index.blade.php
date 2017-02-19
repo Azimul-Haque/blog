@@ -1,4 +1,4 @@
-@extends('main')
+@extends('dashboard')
 
 @section('title', 'Blog | All Categories')
 @section('stylesheet')
@@ -9,7 +9,7 @@
 
 	<div class="row">
 		<div class="col-md-8">
-			<h1>বিষয়সমূহ</h1>
+			<h1><i class="fa fa-folder-open-o" aria-hidden="true"></i> বিষয়সমূহ</h1>
 			<table class="table">
 				<thead>
 					<tr>

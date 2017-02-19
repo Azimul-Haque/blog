@@ -1,4 +1,4 @@
-@extends('main')
+@extends('dashboard')
 
 @section('title', 'Blog | Edit Post')
 @section('stylesheet')
@@ -50,7 +50,7 @@
 			<div class="well">
 				<dl class="dl-horizontal">
 					<label>URL</label>
-					<p> <a href="{{ url('article/'.$post->slug) }}">{{ url('article/'.$post->slug) }}</a> </p>
+					<p> <a style="word-wrap: break-word;" href="{{ url('article/'.$post->slug) }}">{{ url('article/'.$post->slug) }}</a> </p>
 				</dl>
 				<dl class="dl-horizontal">
 					<label>Created at</label>
@@ -63,11 +63,11 @@
 				<hr>
 				<div class="row">
 					<div class="col-sm-6">
-						{!! Html::linkRoute('posts.show', 'Cancel', array($post->id), array('class'=>'btn btn-danger btn-block')) !!}
+						<a href="{{route('posts.show', $post->id)}}" class="btn btn-danger btn-block"><i class="fa fa-undo" aria-hidden="true"></i> বাতিল করুন</a>
 						
 					</div>
 					<div class="col-sm-6">
-						{{ Form::submit('Save Changes', ['class'=>'btn btn-success btn-block']) }}
+						<button class="btn btn-success btn-block" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> সংরক্ষণ করুন</button>
 						
 					</div>
 				</div>

@@ -60,9 +60,9 @@
             <li class="{{ Request::is('contact') ? 'active': '' }}"><a href="/contact"><i class="fa fa-envelope-o" aria-hidden="true"></i> যোগাযোগ</a></li>
             <li class="{{ Request::is('categories/blogs') ? 'active': '' }}"><a href="/categories/blogs"><i class="fa fa-folder-open-o" aria-hidden="true"></i> বিষয়ভিত্তিক ব্লগ</a></li>
           </ul>
-          @if(Auth::check())
-            <a href="{{route('posts.create')}}" class="btn btn-primary btn-sm navbar-btn newPost"><i class="fa fa-plus-square" aria-hidden="true"></i> নতুন ব্লগ পোস্ট লিখুন</a>
-          @endif
+          
+          <a href="{{route('posts.create')}}" class="btn btn-primary btn-sm navbar-btn newPost"><i class="fa fa-plus-square" aria-hidden="true"></i> নতুন ব্লগ পোস্ট লিখুন</a>
+
           <ul class="nav navbar-nav navbar-right">
             @if(Auth::check() && Auth::user()->role == 'admin')
               <li class="{{ Request::is('superadmin/blog/allposts') ? 'active': '' }}"><a href="/superadmin/blog/allposts"><i class="fa fa-lock" aria-hidden="true"></i> সুপার এডমিন</a></li>
@@ -70,6 +70,7 @@
             @endif
 
             @if(Auth::check())
+
             <li class="dropdown">
               <a href="/" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-circle" aria-hidden="true"></i> {{Auth::user()->name}}<span class="caret"></span></a>
               <ul class="dropdown-menu">
@@ -79,8 +80,8 @@
               </ul>
             </li>
             @else
-              <li class="{{ Request::is('auth/login') ? 'active': '' }}"><a href="{{ route('login') }}" class=""><i class="fa fa-sign-in" aria-hidden="true"></i> লগ ইন করুন</a></li>
-              <li class="{{ Request::is('auth/register') ? 'active': '' }}"><a href="{{ route('register') }}" class=""><i class="fa fa-plus" aria-hidden="true"></i> রেজিস্টার করুন</a></li>
+              <li class="{{ Request::is('login') ? 'active': '' }}"><a href="{{ route('login') }}" class=""><i class="fa fa-sign-in" aria-hidden="true"></i> লগ ইন করুন</a></li>
+              <li class="{{ Request::is('register') ? 'active': '' }}"><a href="{{ route('register') }}" class=""><i class="fa fa-plus" aria-hidden="true"></i> রেজিস্টার করুন</a></li>
             </li>
             @endif
           </ul>
@@ -90,10 +91,37 @@
       <!-- /.container-fluid -->
     </nav>
 
-    <div class="container" style="margin-top:70px"> <!--USE IT NEAR FUTURE  style="margin-top:70px" (done)-->
-      <img src="{{url('images/banner.png')}}" class="img-responsive banner"><br/>
-      @include('partials._messages')
-      @yield('content')
+    <div class="container-fluid" style="margin-top:70px"> <!--USE IT NEAR FUTURE  style="margin-top:70px"-->
+      <div class="row">
+        <div class="col-md-2">
+          @if(Auth::user()->role == 'admin')
+            <div class="row">
+              <div class="btn-group-vertical col-md-12">
+                <button type="button" class="btn btn-info btn-block"><i class="fa fa-lock" aria-hidden="true"></i> সুপার এডমিন ড্যাশবোর্ড</button>
+                <a type="button" class="btn btn-default btngroup btn-block" href="/superadmin/blog/allposts"><i class="fa fa-clipboard" aria-hidden="true"></i> সকল ব্লগপোস্ট</a>
+                <a type="button" class="btn btn-default btngroup btn-block" href="/superadmin/bloggers"><i class="fa fa-list-ol" aria-hidden="true"></i> ব্লগারদের তালিকা</a>
+                <a type="button" class="btn btn-default btngroup btn-block" href="{{ route('categories.index') }}"><i class="fa fa-folder-open-o" aria-hidden="true"></i> ক্যাটাগরি</a>
+                <a type="button" class="btn btn-default btngroup btn-block" href="{{ route('tags.index') }}"><i class="fa fa-tags" aria-hidden="true"></i> ট্যাগসমূহ</a>
+                <a type="button" class="btn btn-default btngroup btn-block" href="{{ route('posts.reportedComments') }}"><i class="fa fa-ban" aria-hidden="true"></i> রিপোর্টেড কমেন্টগুলো</a> <br/>
+              </div>
+            </div>
+          @endif
+          @if(Auth::check())
+            <div class="row">
+              <div class="btn-group-vertical col-md-12">
+                <button type="button" class="btn btn-success btn-block"><i class="fa fa-pencil-square" aria-hidden="true"></i> ব্লগার ড্যাশবোর্ড</button>
+                <a type="button" class="btn btn-default btngroup btn-block" href="/profile"><i class="fa fa-user" aria-hidden="true"></i> প্রোফাইল</a>
+                <a type="button" class="btn btn-default btngroup btn-block" href="/posts"><i class="fa fa-pencil" aria-hidden="true"></i> আমার লেখাগুলো</a>
+                <a type="button" class="btn btn-default btngroup btn-block" href="{{ route('logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i> <b>লগ আউট</b></a>
+              </div> 
+            </div> 
+          @endif
+        </div>
+        <div class="col-md-10">
+          @include('partials._messages')
+          @yield('content')
+        </div>
+      </div>
 
     </div>
     <!-- end of .container -->
@@ -103,7 +131,7 @@
         <hr>
         <p class="text-muted text-center">&copy; {{date('Y')}} Copyright Reserved, Blog Humans of Thakurgaon</p>
       </div>
-    </div>
+  </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>

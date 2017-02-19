@@ -1,4 +1,4 @@
-@extends('main')
+@extends('dashboard')
 
 @section('title', 'Blog | All Tags')
 @section('stylesheet')
@@ -9,7 +9,7 @@
 
 	<div class="row">
 		<div class="col-md-8">
-			<h1>সকল ট্যাগ</h1>
+			<h1><i class="fa fa-tags" aria-hidden="true"></i> সকল ট্যাগ</h1>
 			<table class="table">
 				<thead>
 					<tr>

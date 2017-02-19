@@ -9,6 +9,7 @@ use App\Post;
 use App\Category;
 use App\Tag;
 use App\User;
+use App\Comment;
 use Mail;
 
 
@@ -22,12 +23,20 @@ class PagesController extends Controller {
                                 ->where('isDeleted', '!=', '0')
                                 ->take(10)
                                 ->get();
+        $bloggers = User::orderBy('id', 'desc')->first();                        
+        $totalpost = Post::orderBy('id', 'desc')->first();
+        $totalcomment = Comment::orderBy('id', 'desc')->first();
+        $featured = Post::where('featured', '=', 'YES')->first();                  
 
         
                        
         return view('pages.welcome')
         			->withPosts($posts)
-                    ->withPopulars($populars);
+                    ->withPopulars($populars)
+                    ->withBloggers($bloggers)
+                    ->withTotalpost($totalpost)
+                    ->withTotalcomment($totalcomment)
+                    ->withFeatured($featured);
 	}  
 
 	public function getAbout() {

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Post;
 use App\Tag;
+use App\User;
 
 class BlogController extends Controller
 {
@@ -17,7 +18,19 @@ class BlogController extends Controller
 
         $post->save();
 
-    	return view('blog.single')
-    		->withPost($post);
+        $populars = Post::orderBy('hits', 'desc')
+                                ->where('isDeleted', '!=', '0')
+                                ->take(10)
+                                ->get();
+        $bloggers = User::orderBy('id', 'desc')->first();                        
+        $totalpost = Post::orderBy('id', 'desc')->first();                      
+
+        
+                       
+        return view('blog.single')
+    				->withPost($post)
+                    ->withPopulars($populars)
+                    ->withBloggers($bloggers)
+                    ->withTotalpost($totalpost);	
     }
 }

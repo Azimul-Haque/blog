@@ -55,7 +55,7 @@ return [
     |
     */
 
-    'from' => ['address' => 'noreply@hotgblog.com', 'name' => 'Blog HoTg'],
+    'from' => ['address' => 'flasbfscd@gmail.com', 'name' => 'Blog HoTg'],
 
     /*
     |--------------------------------------------------------------------------

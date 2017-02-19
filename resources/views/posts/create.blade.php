@@ -1,4 +1,4 @@
-@extends('main')
+@extends('dashboard')
 
 @section('title', 'Blog | Create New Post')
 @section('stylesheet')
@@ -28,7 +28,7 @@
 @section('content')
 
 	<div class="row">
-		<div class="col-md-8 col-md-offset-2">
+		<div class="col-md-8">
 			<h1>Create New Post</h1>
 			<hr>
 			{!! Form::open(['route' => 'posts.store', 'data-parsley-validate' => '', 'files' => 'true', 'enctype' => 'multipart/form-data', 'method' => 'POST']) !!}

@@ -1,4 +1,4 @@
-@extends('main')
+@extends('dashboard')
 
 @section('title', 'Blog | View Post')
 @section('stylesheet')
@@ -11,7 +11,7 @@
 	<div class="row">
 		<div class="col-md-8">
 			<h1 class="postTitle">{{ $post->title}}</h1>
-			<p class="lead postBody">{!! $post->body!!}</p>
+			<span class="lead postBody">{!! $post->body!!}</span>
 			<hr>				
 			<div class="tags">
 				
@@ -61,7 +61,7 @@
 			<div class="well">
 				<dl class="dl-horizontal">
 					<label>URL</label>
-					<p> <a href="{{ url('article/'.$post->slug) }}">{{ url('article/'.$post->slug) }}</a> </p>
+					<p><a style="word-wrap: break-word;" href="{{ url('article/'.$post->slug) }}">{{ url('article/'.$post->slug) }}</a> </p>
 				</dl>
 				<dl class="dl-horizontal">
 					<label>Category:</label>
@@ -78,29 +78,50 @@
 				<hr>
 				<div class="row">
 					<div class="col-sm-6">
-						{!! Html::linkRoute('posts.edit', 'Edit', array($post->id), array('class'=>'btn btn-primary btn-block')) !!}
-						
+						<a href="{{url('posts/'.$post->id.'/edit')}}" class="btn btn-primary btn-block"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> সম্পাদনা করুন</a>
 					</div>
 					<div class="col-sm-6">
-					{!! Form::open(['route' => ['posts.destroy', $post->id], 'method'=>'DELETE']) !!}
-						{!! Form::submit('Delete', ['class'=>'btn btn-danger btn-block']) !!}
-					{!! Form::close() !!}	
+					<button type="button" class="btn btn-danger btn-block" id="modalDeleteClick"><i class="fa fa-trash-o" aria-hidden="true"></i> মুছুন</button>
+					<div class="modal fade" id="modalDelete" role="dialog">
+					    <div class="modal-dialog">
+					      <div class="modal-content">
+					        <div class="modal-header">
+					          <button type="button" class="close" data-dismiss="modal">×</button>
+					          <h4 class="modal-title">পোস্ট মুছে ফেলুন!</h4>
+					        </div>
+					        <div class="modal-body">
+					          <p>আপনি কি নিশ্চিতভাবে এই পোস্টটি মুছে ফেলতে চান?</p>
+					          <p><strong>Note:</strong> মুছে ফেলা পোস্ট আর ফিরে পাওয়া যাবে না!</p>         
+							{!! Form::open(['route' => ['posts.destroy', $post->id], 'method'=>'DELETE']) !!}
+								{!! Form::submit('Delete', ['class'=>'btn btn-danger btn-block']) !!}
+							{!! Form::close() !!}
+					        </div>
+					        <div class="modal-footer">
+					          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					        </div>
+					      </div>
+					    </div>
+					  </div>	
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-sm-12">
-						{!! Html::linkRoute('posts.index', '<< Show All Posts', array(), array('class'=>'btn btn-default btn-block btn-h1-spacing')) !!}
+						{!! Html::linkRoute('posts.index', '<< সকল পোস্ট দেখুন', array(), array('class'=>'btn btn-default btn-block btn-h1-spacing')) !!}
 					</div>
 				</div>
 			</div>
 		</div>
 
 	</div>
-
-
-
 @endsection
 
 @section('script')
 	{!!Html::script('')!!}
+	<script>
+		$(document).ready(function(){
+		    $("#modalDeleteClick").click(function(){
+		        $("#modalDelete").modal({backdrop: "static"});
+		    });
+		});
+	</script>
 @endsection

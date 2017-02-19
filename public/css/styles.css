@@ -1,11 +1,18 @@
 
-
 .postTitle{
     font-family:MyAdorshoLipi;sans-serif !important;
+    color: #00695c;
 
 }
 .postTitle:visited { text-decoration: none; }
-.postTitle:hover { text-decoration: none; }
+.postTitle:hover { 
+    text-decoration: none;
+    color: #26a69a; 
+}
+.mainBodyPostTitle {
+    font-size: 30px;
+    line-height: 1em;
+}
 
 .postSlug{
     font-family:MyAdorshoLipi;sans-serif !important;
@@ -13,6 +20,8 @@
 .postBody{
     text-align: justify !important;
     font-family:MyAdorshoLipi;sans-serif !important;
+    word-wrap: break-word !important;
+    font-size: 16px;
 }
 
 .btn-h1-spacing{
@@ -90,4 +99,57 @@
 
 .img-responsive{
     max-height: 800px;
+}
+
+.panel{
+    -webkit-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.6) !important;
+    -moz-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.6) !important;
+    box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.6) !important;
+    border-radius: 0px !important;
+}
+
+.featuredPost{
+    font-size: 20px;
+    color: #bf360c;
+    font-weight: bold;
+    border-bottom: 1px solid #bf360c;
+}
+
+.newPost{
+    background: #9ccc65 !important;
+    border-radius: 0px  !important;
+    border-color: #558b2f  !important;
+}
+
+.newPost:hover{
+    background: #8bc34a !important;
+    border-radius: 0px  !important;
+}
+
+
+
+.categoryTagTabel td, .categoryTagTabel th{
+    border-color: #d84315 !important;
+}
+
+img {
+    width: 100%;
+    height: auto;
+}
+
+.btn {
+    border-radius: 0px !important;
+}
+
+.btngroup {
+    text-align: left !important;
+}
+
+.form-control {
+    border-radius: 0px !important;
+}
+
+.faq {
+    text-decoration:none !important;
+    color: navy;
 }

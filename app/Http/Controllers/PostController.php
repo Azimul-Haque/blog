@@ -20,6 +20,7 @@ class PostController extends Controller {
     
     public function __construct(){
         $this->middleware('auth');
+        $this->middleware('admin', ['only' => ['getBloggersList', 'getAllblogposts', 'makeFeatured']]);
     }
     /**
      * Display a listing of the resource.
@@ -30,7 +31,7 @@ class PostController extends Controller {
     {
         $posts = Post::orderBy('id', 'desc')
                                 ->where('isDeleted', '!=', '0')
-                                ->where('postedBy', '=', Auth::user()->name)
+                                ->where('postedBy', '=', Auth::user()->name) // email id dite hobe 
                                 ->paginate(5);
         $categories = Category::all();     
 
@@ -141,10 +142,14 @@ class PostController extends Controller {
      */
     public function edit($id)
     {
-        $post = Post::where('id', '=' , $id)
+        if(Auth::user()->role == 'admin') {
+            $post = Post::find($id);
+        } else {
+            $post = Post::where('id', '=' , $id)
                                 ->where('isDeleted', '!=', '0')
                                 ->where('postedBy', '=', Auth::user()->name)
                                 ->first();
+        }
         $categories = Category::all();
         $tags = Tag::all();  
 
@@ -179,7 +184,14 @@ class PostController extends Controller {
     public function update(Request $request, $id)
     {
        
-       $post = Post::find($id);
+       if(Auth::user()->role == 'admin') {
+            $post = Post::find($id);
+        } else {
+            $post = Post::where('id', '=' , $id)
+                                ->where('isDeleted', '!=', '0')
+                                ->where('postedBy', '=', Auth::user()->name)
+                                ->first();
+        }
 
        if($request->input('slug') == $post->slug){
             $this->validate($request, array(
@@ -225,7 +237,14 @@ class PostController extends Controller {
      */
     public function destroy($id)
     {
-       $post = Post::find($id);
+       if(Auth::user()->role == 'admin') {
+            $post = Post::find($id);
+        } else {
+            $post = Post::where('id', '=' , $id)
+                                ->where('isDeleted', '!=', '0')
+                                ->where('postedBy', '=', Auth::user()->name)
+                                ->first();
+        }
 
        $post->category_id = '';
        $post->isDeleted = '0';
@@ -253,6 +272,40 @@ class PostController extends Controller {
                     ->withUsers($users)
                     ->withPosts($posts);
     }
+
+    public function getAllblogposts() {
+        $users = User::orderBy('id', 'desc')->get();
+        $posts = Post::orderBy('created_at', 'desc')
+                                ->where('isDeleted', '!=', '0')
+                                ->paginate(10); // it will be 15
+
+        return view('pages.allposts')
+                    ->withUsers($users)
+                    ->withPosts($posts);
+    }
+
+    public function makeFeatured(Request $request, $id) {
+        
+        // first, make the previous featured post unfeatured
+        $previousFeature = Post::where('featured', '=', 'YES')->first();
+        if($previousFeature) {
+            $previousFeature->featured = '1';
+            $previousFeature->save();
+        }
+
+        // now, make the selected one featured
+        $newFeatured = Post::find($id);
+
+        $newFeatured->featured = 'YES';
+        $newFeatured->save();
+
+        Session::flash('success', 'সফলভাবে ফিচারড করা হয়েছে');
+                                  
+        //redirect
+        return redirect()->route('posts.allblogposts');
+    }
+
+
 
     
 }

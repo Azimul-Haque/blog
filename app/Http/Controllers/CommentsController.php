@@ -14,6 +14,7 @@ class CommentsController extends Controller
 {
     public function __construct(){
         $this->middleware('auth', ['except' => 'store']);
+        $this->middleware('admin', ['only' => 'getReportedComments', 'delete', 'destroy', 'getReportedComments']);
     }
     /**
      * Display a listing of the resource.
@@ -59,8 +60,8 @@ class CommentsController extends Controller
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
-     */
-    /**   public function edit($id)
+     **/
+/*    public function edit($id)
     {
         $comment = Comment::where('id', '=', $id)
                             ->where($comment->post->postedBy, '=', Auth::user()->name)
@@ -83,8 +84,9 @@ class CommentsController extends Controller
 
         //redirect
         return redirect()->route('posts.show', [$comment->post->id]);
-    }
-
+    }*/
+    
+    // delete er somoy middleware a admin diye only ei method duita kore nite hobe
     public function delete($id)
     {
         $comment = Comment::find($id);
@@ -101,9 +103,9 @@ class CommentsController extends Controller
         Session::flash('success', 'কমেন্ট সফলভাবে মুছে ফেলা হয়েছ।');
 
         //redirect
-        return redirect()->route('posts.show', $post_id);
+        return redirect()->route('posts.reportedComments');
     }
-*/
+
 
     public function report($id)
     {
@@ -116,7 +118,7 @@ class CommentsController extends Controller
         $comment = Comment::find($id);
         $post_id = $comment->post->id;
 
-        $comment->isReported = 1;
+        $comment->isReported = $comment->isReported + 1;
         $comment->save();
 
         Session::flash('success', 'কমেন্ট সফলভাবে রিপোর্ট করা হয়েছ।');
@@ -124,4 +126,17 @@ class CommentsController extends Controller
         //redirect
         return redirect()->route('posts.show', $post_id);
     }
+
+    public function getReportedComments()
+    {
+        $reportedcomments = Comment::orderBy('id', 'desc')
+                                   ->where('isReported', '>', '0')
+                                   ->get();
+        $totalreportedcomments = Comment::where('isReported', '>', '0')->get()->count();
+        return view('comments.reported')
+                ->withTotalreportedcomments($totalreportedcomments)
+                ->withReportedcomments($reportedcomments);
+    }
+
+
 }

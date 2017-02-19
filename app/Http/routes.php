@@ -52,13 +52,14 @@ Route::post('comments/{post_id}', ['uses' => 'CommentsController@store', 'as' =>
 // Super Admin will have these access
 //Route::get('comments/{id}/edit', ['uses' => 'CommentsController@edit', 'as' => 'comments.edit']);
 //Route::put('comments/{id}', ['uses' => 'CommentsController@update', 'as' => 'comments.update']);
-//Route::get('comments/{id}/delete', ['uses' => 'CommentsController@delete', 'as' => 'comments.delete']);
-//Route::delete('comments/{id}', ['uses' => 'CommentsController@destroy', 'as' => 'comments.destroy']);
+Route::get('comments/{id}/delete', ['uses' => 'CommentsController@delete', 'as' => 'comments.delete']);
+Route::delete('comments/{id}', ['uses' => 'CommentsController@destroy', 'as' => 'comments.destroy']);
 Route::get('comments/{id}/report', ['uses' => 'CommentsController@report', 'as' => 'comments.report']);
 Route::put('comments/{id}', ['uses' => 'CommentsController@reportconfirm', 'as' => 'comments.reportconfirm']);
 
 // Super Admin 
-
-
 Route::get('superadmin/bloggers', ['uses' => 'PostController@getBloggersList', 'as' => 'posts.bloggerlist']);
+Route::get('superadmin/blog/allposts', ['uses' => 'PostController@getAllblogposts', 'as' => 'posts.allblogposts']);
+Route::put('superadmin/article/feature/{id}', ['uses' => 'PostController@makeFeatured', 'as' => 'posts.makefeatured']);
+Route::get('superadmin/comments/reported', ['uses' => 'CommentsController@getReportedComments', 'as' => 'posts.reportedComments']);
 

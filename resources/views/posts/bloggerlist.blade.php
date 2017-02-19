@@ -1,4 +1,4 @@
-@extends('main')
+@extends('dashboard')
 
 @section('title', 'Blog | Profile')
 
@@ -20,8 +20,14 @@
           	<tr>
           		<td>{{ $user->name }}</td>
           		<td>{{ date('F d, Y h:i A', strtotime($user->created_at))}}</td>
-          		<td>
-
+          		<td> <?php $i = 0; ?>
+                  @foreach ($posts as $post)
+                    {{--IT NEEDS TO BE FIXED WITH USER ID, REMEMBER--}}
+                    @if($user->name == $post->postedBy)
+                      <?php $i++; ?>
+                    @endif
+                  @endforeach
+                  {{ $i }}
           		</td>
           	</tr>
           @endforeach

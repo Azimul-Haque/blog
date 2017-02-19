@@ -10,32 +10,33 @@
 	<div class="row">
 		<div class="col-md-8">
 			@foreach($category->posts()->orderBy('id', 'desc')->get() as $post)
-				<h3 class="postTitle">{{ $post->title }}</h3>
+				<p class="postTitle mainBodyPostTitle"><strong><a href="{{url('article/'.$post->slug)}}" class="postTitle">{{ $post->title }}</a></strong></p>
 	            <h5><strong>লিখেছেনঃ</strong> 
 	            <a href="{{url('profile/'.$post->postedBy)}}" class="">{{ $post->postedBy }} </a>
-	            | <span> {{ date('F d, Y | h:i A', strtotime($post->created_at))}}
+	            <span> {{ date('F d, Y | h:i A', strtotime($post->created_at))}}
 					<i class="diffForHumans">{{ $post->created_at->diffForHumans() }}</i>
 	            </span></h5>
-	            <p class="postBody">
-	            {!!strlen($post->body)>1200? substr($post->body, 0, strpos($post->body, " ", strpos(strip_tags($post->body), " ")+1200))." [...]" : $post->body!!}
-	            </p>
-	            <a href="{{url('article/'.$post->slug)}}" class="btn btn-primary btn-sm">Read More</a> 
-	            <hr>
+	            <span class="postBody">
+	            	{!!strlen($post->body)>1200? substr($post->body, 0, strpos($post->body, " ", strpos(strip_tags($post->body), " ")+1200))." [...] " : $post->body!!}
+	            	<a href="{{ url('article/'.$post->slug) }}">বাকিটুকু পড়ুন</a>
+	            </span>
+	            <p></p>
 				
-				<span>বিষয়ঃ 
-				<a class="" href="/category/{{$post->category->name}}/">{{ $post->category->name }}</a>
-				</span> | 
-				<span>ট্যাগসমূহঃ 
-					<?php
-						$labels = array('default','primary','success','info','warning','danger');
-						$i = 1;
-					?>
-					@foreach ($post->tags as $tag)
-						<a class="label label-{{$labels[$i]}}" href="/tag/{{$tag->name}}/">{{ $tag->name }}
-						</a>
-						<?php $i++?>
-					@endforeach
-				</span>
+				<span><i class="fa fa-folder-open-o" aria-hidden="true"></i> বিষয়ঃ <a href="/category/{{$post->category->name}}/">{{ $post->category->name }}</a>
+	            </span> | 
+	            <span><i class="fa fa-tags" aria-hidden="true"></i> ট্যাগসমূহঃ 
+	              <?php
+	                $labels = array('default','primary','success','info','warning','danger');
+	                $i = 1;
+	              ?> 
+	              @foreach ($post->tags as $tag)
+	                <a class="label label-{{$labels[$i]}}" href="/tag/{{$tag->name}}">{{ $tag->name }} 
+	                  </a>
+	                <?php $i++?>
+	              @endforeach 
+	               <span style="margin-left: 5px;">[ <i class="fa fa-eye" aria-hidden="true"></i> {{ $post->hits }} ]</span>
+	               <span style="margin-left: 5px;">[ <i class="fa fa-comments" aria-hidden="true"></i> {{ $post->comments()->count() }} ]</span>
+	            </span>
 				<hr>
 			@endforeach
 		</div>

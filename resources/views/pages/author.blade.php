@@ -4,9 +4,18 @@
 
 @section('content')
       <div class="row">
+        <div class="col-md-4">
+          <dir class="well">
+           	  <h3>ব্লগারঃ {{ $user->name }}</h3>
+	          <p>ফেইসবুক লিঙ্কঃ {{ $user->fb }}</p>
+	          <p>আমার সম্পর্কেঃ {{ $user->about }}</p>
+	          <p>ব্লগ লিখেছেনঃ {{ $posts->count() }} টি</p>
+	          <p>ব্লগে যোগদান করেছেনঃ {{ date('F d, Y', strtotime($user->created_at))}}</p>
+          </dir>
+        </div>
       	<div class="col-md-8">
       		<h2>{{ $user->name }}-এর ব্লগগুলো...</h2>
-      		@foreach ($posts as $post)
+      		  @foreach ($posts as $post)
 	          <div class="post">
 	            <h3 class="postTitle">{{ $post->title }}</h3>
 	            <h5><strong>লিখেছেনঃ</strong> 
@@ -22,18 +31,8 @@
 	            </p>
 	            <a href="{{url('article/'.$post->slug)}}" class="btn btn-primary btn-sm">Read More</a> 
 	            <hr>
-	          </div> 
-
-	        @endforeach
-      	</div>
-        <div class="col-md-4">
-          <dir class="well">
-           	  <h3>ব্লগারঃ {{ $user->name }}</h3>
-	          <p>ফেইসবুক লিঙ্কঃ {{ $user->fb }}</p>
-	          <p>আমার সম্পর্কেঃ {{ $user->about }}</p>
-	          <p>ব্লগ লিখেছেনঃ {{ $posts->count() }} টি</p>
-	          <p>ব্লগে যোগদান করেছেনঃ {{ date('F d, Y', strtotime($post->created_at))}}</p>
-          </dir>
-        </div>
+	          </div>
+      		  @endforeach
+      	</div>	
       </div>
 @endsection

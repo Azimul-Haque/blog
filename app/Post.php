@@ -16,5 +16,9 @@ class Post extends Model
 
     public function comments() {
     	return $this->hasMany('App\Comment');
-    } 
+    }
+
+    public function user(){
+	    return $this->hasOne('App\User', 'postedBy', 'id');
+	}
 }
