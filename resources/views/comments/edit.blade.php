@@ -1,6 +1,6 @@
 @extends('dashboard')
 
-@section('title', 'Blog | Edit Comment')
+@section('title', 'ব্লগ | মন্তব্য সম্পাদনা')
 @section('stylesheet')
 	{!!Html::style('css/parsley.css')!!}
 @endsection

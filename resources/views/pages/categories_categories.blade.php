@@ -1,6 +1,6 @@
 @extends('main')
 
-@section('title', 'Blog | Category Based')
+@section('title', 'ব্লগ | বিষয়ভিত্তিক')
 @section('stylesheet')
 	{!!Html::style('')!!}
 @endsection
@@ -9,20 +9,37 @@
 
 	<div class="row">
 		<div class="col-md-8">
-			@foreach($category->posts()->orderBy('id', 'desc')->get() as $post)
+			@if($category->posts()->count() == 0)
+				<div class="alert alert-info">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			    	এই বিষয়ে কোন ব্লগপোস্ট পাওয়া যায়নি।
+				</div>
+			@endif
+			@foreach($category->posts()->orderBy('id', 'desc')
+							->where('category_id', '=', $category->id)
+							->where('isDeleted', '!=', '0')
+                            ->where('isPublished', '=', 'publish')
+							->get() as $post)
 				<p class="postTitle mainBodyPostTitle"><strong><a href="{{url('article/'.$post->slug)}}" class="postTitle">{{ $post->title }}</a></strong></p>
-	            <h5><strong>লিখেছেনঃ</strong> 
-	            <a href="{{url('profile/'.$post->postedBy)}}" class="">{{ $post->postedBy }} </a>
+	            <h5><strong>লিখেছেনঃ</strong>
+	            <?php
+                    foreach ($users as $user) {
+                        if($user->id == $post->postedBy){
+                          $writtenBy = $user->name;
+                        }
+                    }
+                ?>
+	            <a href="{{url('profile/'.$writtenBy)}}" class="">{{ $writtenBy }} </a>
 	            <span> {{ date('F d, Y | h:i A', strtotime($post->created_at))}}
 					<i class="diffForHumans">{{ $post->created_at->diffForHumans() }}</i>
 	            </span></h5>
 	            <span class="postBody">
-	            	{!!strlen($post->body)>1200? substr($post->body, 0, strpos($post->body, " ", strpos(strip_tags($post->body), " ")+1200))." [...] " : $post->body!!}
+	            	{!!strlen($post->body)>1200? substr($post->body, 0, strpos($post->body, " ", strpos(strip_tags($post->body), " ")+1150))." [...] " : $post->body!!}
 	            	<a href="{{ url('article/'.$post->slug) }}">বাকিটুকু পড়ুন</a>
 	            </span>
 	            <p></p>
 				
-				<span><i class="fa fa-folder-open-o" aria-hidden="true"></i> বিষয়ঃ <a href="/category/{{$post->category->name}}/">{{ $post->category->name }}</a>
+				<span><i class="fa fa-folder-open-o" aria-hidden="true"></i> বিষয়ঃ <a href="{{ url('/category/'.$post->category->name) }}">{{ $post->category->name }}</a>
 	            </span> | 
 	            <span><i class="fa fa-tags" aria-hidden="true"></i> ট্যাগসমূহঃ 
 	              <?php
@@ -35,7 +52,14 @@
 	                <?php $i++?>
 	              @endforeach 
 	               <span style="margin-left: 5px;">[ <i class="fa fa-eye" aria-hidden="true"></i> {{ $post->hits }} ]</span>
-	               <span style="margin-left: 5px;">[ <i class="fa fa-comments" aria-hidden="true"></i> {{ $post->comments()->count() }} ]</span>
+	               <span style="margin-left: 5px;">[ <i class="fa fa-comments" aria-hidden="true"></i> 	  <?php $total = 0?>
+	                  @foreach($post->comments as $comment)
+	                    <?php
+	                      $total = $total + $comment->commentreplies->count();
+	                    ?>
+	                  @endforeach
+	                  {{ $post->comments()->count() + $total }}
+	               ]</span>
 	            </span>
 				<hr>
 			@endforeach
@@ -52,11 +76,11 @@
 				</thead>
 
 				<tbody>
-				@foreach ($categorylist as $category)
+				@foreach ($categorylist as $categoryeach)
 					<tr>
-						<th>{{ $category->id }}</th>
-						<th><a href="/category/{{$category->name}}/">{{ $category->name }}</a></th>
-						<th>{{ $category->posts()->count() }}</th>
+						<th>{{ $categoryeach->id }}</th>
+						<th><a href="/category/{{$categoryeach->name}}/">{{ $categoryeach->name }}</a></th>
+						<th>{{ $categoryeach->posts()->count() }}</th>
 					</tr>
 				@endforeach
 				</tbody>

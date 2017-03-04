@@ -1,8 +1,8 @@
 @extends('main')
 
-@section('title', 'Blog | Category Based')
+@section('title', 'ব্লগ | বিষয়সমূহ')
 @section('stylesheet')
-	{!!Html::style('css/styles.css')!!}
+	{!!Html::style('')!!}
 @endsection
 
 @section('content')
@@ -24,7 +24,7 @@
 					@foreach ($categories as $category)
 						<tr>
 							<th>{{ $category->id }}</th>
-							<th><a href="/category/{{$category->name}}/">{{ $category->name }}</a></th>
+							<th><a href="{{url('/category/'.$category->name)}}">{{ $category->name }}</a></th>
 							<th>{{ $category->posts()->count() }}</th>
 						</tr>
 					@endforeach
@@ -49,7 +49,7 @@
 					@foreach ($tags as $tag)
 						<tr>
 							<th>{{ $tag->id }}</th>
-							<th><a href="/tag/{{$tag->name}}/">{{ $tag->name }}</a></th>
+							<th><a href="{{url('/tag/'.$tag->name)}}">{{ $tag->name }}</a></th>
 							<th>{{ $tag->posts()->count() }}</th>
 						</tr>
 					@endforeach

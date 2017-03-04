@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'failed' => 'These credentials do not match our records.',
+    'failed' => 'এই তথ্যগুলো আমাদের ডেটাবেজে নেই!',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
 
 ];

@@ -55,7 +55,7 @@ return [
     |
     */
 
-    'from' => ['address' => 'flasbfscd@gmail.com', 'name' => 'Blog HoTg'],
+    'from' => ['address' => 'blog@humansofthakurgaon.org', 'name' => 'Blog | Humans of Thakurgaon'],
 
     /*
     |--------------------------------------------------------------------------

@@ -10,14 +10,14 @@
       <div class="row">
         <div class="col-md-6 col-md-offset-3">
           <div class="panel panel-default">
-          	<div class="panel-heading">Reset Password</div>
+          	<div class="panel-heading">পাসওয়ার্ড পরিবর্তন করুন</div>
           	<div class="panel-body">
 
           		{!! Form::open(['url' => 'password/email','data-parsley-validate' => '', 'method' => "POST"]) !!}
-      				 	{!! Form::label('email', 'Email:') !!}
+      				 	{!! Form::label('email', 'ইমেইলঃ') !!}
       				 	{!! Form::email('email', null, array('class' => 'form-control', 'required' => '')) !!}
 
-      				 	{!! Form::submit('Reset Password', array('class' => 'btn btn-primary btn-block', 'style' => 'margin-top:20px;')) !!}
+      				 	{!! Form::submit('পাসওয়ার্ড পরিবর্তনের লিংক পাঠান', array('class' => 'btn btn-primary btn-block', 'style' => 'margin-top:20px;')) !!}
       				{!! Form::close() !!}
           	</div>
           </div>

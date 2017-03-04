@@ -1,6 +1,6 @@
 @extends('dashboard')
 
-@section('title', 'Blog | View Post')
+@section('title', 'ব্লগ | ব্লগপোস্ট')
 @section('stylesheet')
 	{!!Html::style('css/styles.css')!!}
 	{!!Html::style('css/font-awesome.min.css')!!}
@@ -10,7 +10,7 @@
 
 	<div class="row">
 		<div class="col-md-8">
-			<h1 class="postTitle">{{ $post->title}}</h1>
+			<h1><a class="postTitle" style="word-wrap: break-word;" href="{{ url('article/'.$post->slug) }}" target="_blank">{{ $post->title }}</a></h1>
 			<span class="lead postBody">{!! $post->body!!}</span>
 			<hr>				
 			<div class="tags">
@@ -30,6 +30,7 @@
 			<div class="backend-comments" style="margin-top: 40px;">
 				<h3>কমেন্ট: <small>মোট {{ $post->comments()->count() }} টি কমেন্ট</small></h3>
 				
+				<div class="table-responsive">
 				<table class="table">
 					<thead>
 						<tr>
@@ -53,7 +54,8 @@
 						</tr>
 						@endforeach
 					</tbody>
-				</table>
+				</table>	
+				</div>
 				
 			</div>
 		</div>
@@ -64,15 +66,15 @@
 					<p><a style="word-wrap: break-word;" href="{{ url('article/'.$post->slug) }}">{{ url('article/'.$post->slug) }}</a> </p>
 				</dl>
 				<dl class="dl-horizontal">
-					<label>Category:</label>
+					<label>বিষয়ঃ</label>
 					<p>{{ $post->category->name}}</p>
 				</dl>
 				<dl class="dl-horizontal">
-					<label>Created at</label>
+					<label>প্রকাশের তারিখ</label>
 					<p>{{ date('F d, Y h:i A', strtotime($post->created_at))}}</p>
 				</dl>
 				<dl class="dl-horizontal">
-					<label>Last updated</label>
+					<label>হালনাগাদের তারিখ</label>
 					<p>{{ date('F d, Y h:i A', strtotime($post->updated_at))}}</p>
 				</dl>
 				<hr>

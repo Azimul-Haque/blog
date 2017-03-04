@@ -14,9 +14,9 @@ return [
     */
 
     'password' => 'Passwords must be at least six characters and match the confirmation.',
-    'reset' => 'Your password has been reset!',
-    'sent' => 'We have e-mailed your password reset link!',
+    'reset' => 'আপনার পাসওয়ার্ড হালনাগাদ করা হয়েছে!',
+    'sent' => 'অনুগ্রহ করে ইমেইলটি চেক করুন! আমরা একটি পাসওয়ার্ড রিসেট লিংক পাঠিয়েছি।',
     'token' => 'This password reset token is invalid.',
-    'user' => "We can't find a user with that e-mail address.",
+    'user' => "এই ইমেইল এড্রেসের বিপরীতে কোন ব্যবহারকারী পাওয়া যায়নি!",
 
 ];

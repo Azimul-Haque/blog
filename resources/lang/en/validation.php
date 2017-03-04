@@ -77,7 +77,7 @@ return [
     ],
     'string'               => 'The :attribute must be a string.',
     'timezone'             => 'The :attribute must be a valid zone.',
-    'unique'               => 'The :attribute has already been taken.',
+    'unique'               => ':attribute টি ইতোমধ্যে ব্যবহৃত হয়েছে। অনুগ্রহ করে বিকল্প :attribute দিয়ে চেষ্টা করুন',
     'url'                  => 'The :attribute format is invalid.',
 
     /*
@@ -94,6 +94,15 @@ return [
     'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',
+        ],
+        'g-recaptcha-response' => [
+            'required' => 'অনুগ্রহ করে ক্যাপচাটিতে টিক চিহ্ন দিন',
+        ],
+        'email' => [
+            'required' => 'অনুগ্রহ করে ইমেইল এড্রেসটি লিখুন',
+        ],
+        'password' => [
+            'required' => 'অনুগ্রহ করে পাসওয়ার্ডটি লিখুন',
         ],
     ],
 

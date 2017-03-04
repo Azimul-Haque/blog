@@ -11,7 +11,7 @@
 
 	<div class="row">
 		<div class="col-md-10">
-			<h1>সকল পোস্ট</h1>
+			<h1>আমার সকল ব্লগ</h1>
 		</div>
 		<div class="col-md-2">
 			<a href="{{route('posts.create')}}" class="btn btn-primary btn btn-block btn-h1-spacing"><i class="fa fa-plus-square" aria-hidden="true"></i> নতুন ব্লগ পোস্ট করুন</a>
@@ -23,6 +23,11 @@
 
 	<div class="row">
 		<div class="col-md-12">
+		@if(count($posts) == '0')
+			<h3>স্বাগতম <strong>{{Auth::user()->name}}</strong>!  আপনি এখনও কোন ব্লগ প্রকাশ করেন নি। ব্লগ লিখুন</h3>
+			<h4><a href="{{ url('about#conditions') }}">ব্লগের নিয়মকানুন।</a></h4>
+			<h4><a href="{{ url('about#rules') }}">কীভাবে ব্লগ লিখব?</a></h4>
+		@endif
 			<div class="table-responsive">
 				<table class="table table-bordered table-condensed table-striped">
 					<thead>
@@ -37,12 +42,6 @@
 						</tr>
 					</thead>
 					<tbody>
-
-					@if(count($posts) == '0')
-						<h3>স্বাগতম <strong>{{Auth::user()->name}}</strong>!  আপনি এখনও কোন ব্লগ প্রকাশ করেন নি। ব্লগ লিখুন</h3>
-						<h4>ব্লগের নিয়মকানুন।</h4>
-						<h4>কীভাবে ব্লগ লিখব?</h4>
-					@endif
 						@foreach ($posts as $post)
 						<tr>
 							<th>{{$post->id}}</th>	

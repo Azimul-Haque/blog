@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Cache;
 
 class User extends Authenticatable
 {
@@ -12,7 +13,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'role', 'email','phone', 'fb', 'about', 'password',
+        'name', 'role', 'email','phone', 'fb', 'blood_group', 'last_donated', 'about', 'password',
     ];
 
     /**
@@ -26,5 +27,11 @@ class User extends Authenticatable
 
     public function posts(){
         return $this->belongsTo('App\Post', 'id', 'postedBy');
+    }
+
+
+    /** Online visitor checking method **/
+    public function isOnline() {
+        return Cache::has('user-is-online-' . $this->id);
     }
 }

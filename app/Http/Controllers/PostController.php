@@ -21,6 +21,7 @@ class PostController extends Controller {
     public function __construct(){
         $this->middleware('auth');
         $this->middleware('admin', ['only' => ['getBloggersList', 'getAllblogposts', 'makeFeatured']]);
+        parent::__construct();
     }
     /**
      * Display a listing of the resource.
@@ -30,12 +31,32 @@ class PostController extends Controller {
     public function index()
     {
         $posts = Post::orderBy('id', 'desc')
+                                ->where('postedBy', '=', Auth::user()->id) // email id dite hobe
                                 ->where('isDeleted', '!=', '0')
-                                ->where('postedBy', '=', Auth::user()->name) // email id dite hobe 
+                                ->where('isPublished', '=', 'publish') 
                                 ->paginate(5);
         $categories = Category::all();     
 
         return view('posts.index')
+                    ->withPosts($posts);
+
+        //$posts = DB::table('posts')
+                          //  ->where('isDeleted', '!=', '0')
+                          // ->orderBy('id', 'desc')
+                          //  ->paginate(5);
+        //return view('posts.index', ['posts' => $posts]);
+    }
+
+    public function getDrafts()
+    {
+        $posts = Post::orderBy('id', 'desc')
+                                ->where('postedBy', '=', Auth::user()->id) // email id dite hobe
+                                ->where('isDeleted', '!=', '0')
+                                ->where('isPublished', '=', 'draft') 
+                                ->paginate(5);
+        $categories = Category::all();     
+
+        return view('posts.drafts')
                     ->withPosts($posts);
 
         //$posts = DB::table('posts')
@@ -74,8 +95,8 @@ class PostController extends Controller {
             'slug'        => 'required|alpha_dash|min:5|max:255|unique:posts,slug',
             'category_id' => 'required|integer',
             'body'        => 'required',
-            'featured_image'        => 'sometimes|image|max:300'
-
+            'featured_image'        => 'sometimes|image|max:300',
+            'isPublished'        => 'required'
        ));
 
 
@@ -83,7 +104,7 @@ class PostController extends Controller {
         $post = new Post;
 
         $post->title = $request->title;
-        $post->postedBy = Auth::user()->name;
+        $post->postedBy = Auth::user()->id;
         $post->slug = $request->slug;
         $post->category_id = $request->category_id;
         $post->body = Purifier::clean($request->body);
@@ -101,12 +122,17 @@ class PostController extends Controller {
             $post->image = $filename;
 
         }
+        $post->isPublished = $request->isPublished;
 
         $post->save();
 
         $post->tags()->sync($request->tags, false);
 
-        Session::flash('success', 'সফলভাবে পাবলিশ করা হয়েছে');
+        if($request->isPublished == 'publish') {
+            Session::flash('success', 'সফলভাবে প্রকাশ করা হয়েছে');
+        } elseif($request->isPublished == 'draft') {
+            Session::flash('success', 'সফলভাবে সংরক্ষণ করা হয়েছে'); 
+        }
 
         //redirect
         return redirect()->route('posts.show', $post->id);
@@ -122,7 +148,7 @@ class PostController extends Controller {
     {
         $post = Post::where('id', '=' , $id)
                             ->where('isDeleted', '!=', '0')
-                            ->where('postedBy', '=', Auth::user()->name)
+                            ->where('postedBy', '=', Auth::user()->id)
                             ->first();
         $categories = Category::all();                    
         return view('posts.show')
@@ -147,7 +173,7 @@ class PostController extends Controller {
         } else {
             $post = Post::where('id', '=' , $id)
                                 ->where('isDeleted', '!=', '0')
-                                ->where('postedBy', '=', Auth::user()->name)
+                                ->where('postedBy', '=', Auth::user()->id)
                                 ->first();
         }
         $categories = Category::all();
@@ -189,7 +215,7 @@ class PostController extends Controller {
         } else {
             $post = Post::where('id', '=' , $id)
                                 ->where('isDeleted', '!=', '0')
-                                ->where('postedBy', '=', Auth::user()->name)
+                                ->where('postedBy', '=', Auth::user()->id)
                                 ->first();
         }
 
@@ -213,6 +239,7 @@ class PostController extends Controller {
        $post->slug = $request->input('slug');
        $post->category_id = $request->input('category_id');
        $post->body = Purifier::clean($request->input('body'));
+       $post->isPublished = $request->isPublished;
 
        $post->save();
        
@@ -222,11 +249,10 @@ class PostController extends Controller {
 
        }
        
+       Session::flash('success', 'সফলভাবে হালনাগাদ করা হয়েছে');
 
-        Session::flash('success', 'সফলভাবে হালনাগাদ করা হয়েছে');
-
-        //redirect
-        return redirect()->route('posts.show', $post->id);
+       //redirect
+       return redirect()->route('posts.show', $post->id);
     }
 
     /**
@@ -242,7 +268,7 @@ class PostController extends Controller {
         } else {
             $post = Post::where('id', '=' , $id)
                                 ->where('isDeleted', '!=', '0')
-                                ->where('postedBy', '=', Auth::user()->name)
+                                ->where('postedBy', '=', Auth::user()->id)
                                 ->first();
         }
 
@@ -259,7 +285,15 @@ class PostController extends Controller {
     }
 
     public function getProfile() {
-        return view('posts.profile');
+        $blogger = User::where('id', '=', Auth::user()->id )->first();
+        $posts = Post::orderBy('created_at', 'desc')
+                                ->where('isDeleted', '!=', '0')
+                                ->get();
+
+
+        return view('posts.profile')
+                        ->withBlogger($blogger)
+                        ->withPosts($posts);
     }
 
     public function getBloggersList() {
@@ -277,7 +311,8 @@ class PostController extends Controller {
         $users = User::orderBy('id', 'desc')->get();
         $posts = Post::orderBy('created_at', 'desc')
                                 ->where('isDeleted', '!=', '0')
-                                ->paginate(10); // it will be 15
+                                ->where('isPublished', '=', 'publish')
+                                ->get();
 
         return view('pages.allposts')
                     ->withUsers($users)

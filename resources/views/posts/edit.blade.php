@@ -1,6 +1,6 @@
 @extends('dashboard')
 
-@section('title', 'Blog | Edit Post')
+@section('title', 'ব্লগ | ব্লগ সম্পাদনা')
 @section('stylesheet')
 	{!!Html::style('css/parsley.css')!!}
 	{!!Html::style('css/select2.min.css')!!}
@@ -30,22 +30,39 @@
 		<div class="col-md-8">
 			{!! Form::model($post, ['route' => ['posts.update', $post->id], 'data-parsley-validate' => '', 'method'=>'PUT']) !!}
 
-				{{ Form::label('title', 'Title') }}
+				{{ Form::label('title', 'শিরোনামঃ') }}
 				{{ Form::text('title', null, ['class'=>'form-control input-lg postTitle', 'required' => '']) }}
 
-				{!! Form::label('slug', 'Slug:', ['class'=>'form-spacing-top']) !!}
+				<label for="slug" class="form-spacing-top">পার্মালিংকঃ  
+			 	<a href="#!" data-toggle="tooltip" title="ব্লগের ঠিকানা সামঞ্জস্যপূর্ণ করা যায়। যেমনঃ www.example.com/আমার_প্রথম_পোস্ট_২০১৭. এখানে .com/ এর পরের অংশটি হল পার্মালিংক।" data-placement="top"><i class="fa fa-question-circle" aria-hidden="true"></i></a></label>	
 			 	{!! Form::text('slug', null, array('class' => 'form-control postSlug', 'required' => '', 'minlength' => '5', 'maxlength' => '255')) !!}
 
-			 	{{ Form::label('category_id', 'Category', ['class'=>'form-spacing-top']) }}
+			 	{{ Form::label('category_id', 'বিষয়ঃ', ['class'=>'form-spacing-top']) }}
 			 	{{ Form::select('category_id', $categories, null, ['class' => 'form-control']) }}
 
-			 	{!! Form::label('tags', 'Tags:', array('class' => 'form-spacing-top')) !!}
+			 	{!! Form::label('tags', 'ট্যাগসমূহঃ', array('class' => 'form-spacing-top')) !!}
 			 	{{ Form::select('tags[]', $tags, null, ['class' => 'form-control select2-multi', 'multiple' => 'multiple', 'required' => '']) }}
 
-				{{ Form::label('body', 'Body', ['class'=>'form-spacing-top']) }}
+				{{ Form::label('body', 'মূল অংশঃ', ['class'=>'form-spacing-top']) }}
 				{{ Form::textarea('body', null,['class'=>'form-control postBody', 'minlength' => '100']) }}
+				<br/>
+				@if ($post->isPublished == 'publish')
+	                <label class="radio-inline">
+	                	{{ Form::radio('isPublished', 'publish', true, ['checked' => 'checked']) }} প্রকাশিত
+	                </label>
+	                <label class="radio-inline">
+	                	{{ Form::radio('isPublished', 'draft', false, ['class' => 'radio-inline']) }} ড্রাফট
+	                 </label>	
+	            @elseif ($post->isPublished == 'draft')
+	            	<label class="radio-inline">
+	                	{{ Form::radio('isPublished', 'publish', false, ['class' => 'radio-inline']) }} প্রকাশিত
+	                </label>
+	                <label class="radio-inline">
+	                	{{ Form::radio('isPublished', 'draft', true, ['checked' => 'checked', 'class' => 'radio-inline']) }} ড্রাফট
+	                 </label>
+	            @endif<br/>
 			
-		</div>
+		</div><br/>
 		<div class="col-md-4">
 			<div class="well">
 				<dl class="dl-horizontal">
@@ -53,11 +70,11 @@
 					<p> <a style="word-wrap: break-word;" href="{{ url('article/'.$post->slug) }}">{{ url('article/'.$post->slug) }}</a> </p>
 				</dl>
 				<dl class="dl-horizontal">
-					<label>Created at</label>
+					<label>প্রকাশের তারিখ</label>
 					<p>{{ date('F d, Y h:i A', strtotime($post->created_at))}}</p>
 				</dl>
 				<dl class="dl-horizontal">
-					<label>Last updated</label>
+					<label>হালনাগাদের তারিখ</label>
 					<p>{{ date('F d, Y h:i A', strtotime($post->updated_at))}}</p>
 				</dl>
 				<hr>
@@ -87,5 +104,10 @@
 		$(".select2-multi").select2(
 			{maximumSelectionLength: 5
 		}).val({!! json_encode($post->tags()->getRelatedIds()) !!}).trigger('change')
+	</script>
+	<script>
+		$(document).ready(function(){
+		    $('[data-toggle="tooltip"]').tooltip(); 
+		});
 	</script>
 @endsection

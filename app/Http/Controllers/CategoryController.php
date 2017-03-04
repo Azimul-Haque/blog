@@ -14,6 +14,7 @@ class CategoryController extends Controller
     public function __construct(){
         $this->middleware('auth');
         $this->middleware('admin');
+        parent::__construct();
     }
     /**
      * Display a listing of the resource.
@@ -42,7 +43,7 @@ class CategoryController extends Controller
     {
         //validation
         $this->validate($request, array(
-            'name'=>'required|max:255'
+            'name'=>'required|max:255|unique:categories,name'
         ));
 
 

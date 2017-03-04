@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 
+use Mail;
+
 class AuthController extends Controller
 {
     /*
@@ -49,12 +51,16 @@ class AuthController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
+            'name' => 'required|max:255|unique:users',
             'email' => 'required|email|max:255|unique:users',
             'phone' => 'required|max:255',
-            'fb' => 'required|max:255',
+            'fb' => 'sometimes|max:255',
+            'fb' => 'sometimes|max:255',
+            'blood_group' => 'required|max:255',
+            'last_donated' => 'sometimes|max:255',
             'about' => 'required|min:100',
             'password' => 'required|min:6|confirmed',
+            'g-recaptcha-response' => 'required',
         ]);
     }
 
@@ -66,14 +72,40 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'role' => $data['role'],
             'email' => $data['email'],
             'phone' => $data['phone'],
             'fb' => $data['fb'],
+            'blood_group' => $data['blood_group'],
+            'last_donated' => $data['last_donated'],
             'about' => $data['about'],
             'password' => bcrypt($data['password']),
         ]);
+
+        // send a email to the receipient
+        $dataMail = ['to_email'   => $data['email'],
+                'from_email'   => 'blog@humansofthakurgaon.org',
+                'subject'   => 'স্বাগতম | ব্লগ | হিউম্যানস অব ঠাকুরগাঁও',
+                'bodyMessage'   => 'স্বাগতম '.$data['name']. '। এই ইমেইল এড্রেসের বিপরীতে আপনি ব্লগ | হিউম্যানস অব ঠাকুরগাঁও-এ নিবন্ধন করেছেন।'];
+
+        Mail::send('emails.welcome', $dataMail, function ($message) use ($dataMail) {
+            $message->from($dataMail['from_email']);
+            $message->sender('blog@HoTg.org', 'John Doe');
+        
+            $message->to($dataMail['to_email']);
+            $message->cc('blog@humansofthakurgaon.org');
+            //$message->bcc('john@johndoe.com', 'John Doe');
+        
+            $message->replyTo($dataMail['from_email']);
+            $message->subject($dataMail['subject']);        
+            $message->priority(3);
+        
+            //$message->attach('pathToFile');
+        });
+        // send a email to the receipient
+
+        return $user;
     }
 }

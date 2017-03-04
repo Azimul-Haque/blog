@@ -1,6 +1,6 @@
 @extends('main')
 
-@section('title', 'Blog | Login')
+@section('title', 'ব্লগ | লগইন')
 @section('stylesheet')
 	{!!Html::style('css/parsley.css')!!}
 @endsection
@@ -9,23 +9,27 @@
 
 	<div class="row">
 		<div class="col-md-4 col-md-offset-4">
-			<h1>Login</h1>
+			<h1><i class="fa fa-sign-in" aria-hidden="true"></i> লগইন</h1>
 			<hr>
-			{!! Form::open(['data-parsley-validate' => '']) !!}
-			 	{!! Form::label('email', 'Email:') !!}
-			 	{!! Form::email('email', null, array('class' => 'form-control', 'required' => '')) !!}
+			<div class="panel">
+				<div class="panel-body">
+					{!! Form::open(['data-parsley-validate' => '']) !!}
+					 	<i class="fa fa-envelope-o" aria-hidden="true"></i> {!! Form::label('email', 'ইমেইলঃ') !!}
+					 	{!! Form::email('email', null, array('class' => 'form-control', 'required' => '', 'data-parsley-required-message' => 'আপনার ইমেইল এড্রেসটি লিখুন')) !!}
 
-			 	{!! Form::label('password', 'Password:', array('class' => 'form-spacing-top')) !!}
-			 	{!! Form::password('password', array('class' => 'form-control' , 'required' => '')) !!}
+					 	<i class="fa fa-unlock-alt" aria-hidden="true"></i> {!! Form::label('password', 'পাসওয়ার্ডঃ', array('class' => 'form-spacing-top')) !!}
+					 	{!! Form::password('password', array('class' => 'form-control' , 'required' => '', 'data-parsley-required-message' => 'আপনার পাসওয়ার্ডটি লিখুন')) !!}
 
-			 	{!! Form::label('remember', 'Remember me:', array('class' => 'form-spacing-top')) !!}
-			 	{!! Form::checkbox('remember') !!}
+					 	{!! Form::label('remember', 'মনে রেখ আমায়', array('class' => 'form-spacing-top')) !!}
+					 	{!! Form::checkbox('remember') !!}
 
-			 	{!! Form::submit('Login', array('class' => 'btn btn-primary btn-block', 'style' => 'margin-top:20px;')) !!}
+					 	{!! Form::submit('প্রবেশ করুন', array('class' => 'btn btn-primary btn-block', 'style' => 'margin-top:20px;')) !!}
 
-				<p><a href="{{ url('password/reset') }}">Forgot My Password</a></p>
+						<p><a href="{{ url('password/reset') }}">পাসওয়ার্ড ভুলে গেছেন?</a></p>
 
-			{!! Form::close() !!}
+					{!! Form::close() !!}
+				</div>
+			</div>
 		</div>
 	</div>
 

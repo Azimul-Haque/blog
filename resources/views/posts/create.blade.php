@@ -1,8 +1,7 @@
 @extends('dashboard')
 
-@section('title', 'Blog | Create New Post')
+@section('title', 'ব্লগ | নতুন ব্লগ')
 @section('stylesheet')
-	{!!Html::style('css/styles.css')!!}
 	{!!Html::style('css/parsley.css')!!}
 	{!!Html::style('css/select2.min.css')!!}
 	<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
@@ -29,16 +28,17 @@
 
 	<div class="row">
 		<div class="col-md-8">
-			<h1>Create New Post</h1>
+			<h1>নতুন ব্লগ লিখুন</h1>
 			<hr>
 			{!! Form::open(['route' => 'posts.store', 'data-parsley-validate' => '', 'files' => 'true', 'enctype' => 'multipart/form-data', 'method' => 'POST']) !!}
-			 	{!! Form::label('title', 'Title:') !!}
+			 	{!! Form::label('title', 'শিরোনামঃ') !!}
 			 	{!! Form::text('title', null, array('class' => 'form-control', 'required' => '')) !!}
 
-			 	{!! Form::label('slug', 'Slug:', array('class' => 'form-spacing-top')) !!}
-			 	{!! Form::text('slug', null, array('class' => 'form-control', 'required' => '', 'minlength' => '5', 'maxlength' => '255')) !!}
+			 	<label for="slug" class="form-spacing-top">পার্মালিংকঃ  
+			 	<a href="#!" data-toggle="tooltip" title="ব্লগের ঠিকানা সামঞ্জস্যপূর্ণ করা যায়। যেমনঃ www.example.com/আমার_প্রথম_পোস্ট_২০১৭. এখানে .com/ এর পরের অংশটি হল পার্মালিংক।" data-placement="top"><i class="fa fa-question-circle" aria-hidden="true"></i></a></label>	
+			 	{!! Form::text('slug', Auth::user()->id.'_blog_'.date('Y_m_d_h_i_s'), array('class' => 'form-control', 'required' => '', 'minlength' => '5', 'maxlength' => '255')) !!}
 			 	
-			 	{!! Form::label('category_id', 'Category:', array('class' => 'form-spacing-top')) !!}
+			 	{!! Form::label('category_id', 'বিষয়ঃ', array('class' => 'form-spacing-top')) !!}
 			 	<select class="form-control" name="category_id" required="">
 			 			<option value="" selected="" disabled="">বিষয় নির্বাচন করুন</option>
 			 		@foreach($categories as $category)
@@ -46,20 +46,22 @@
 					@endforeach
 			 	</select>
 
-			 	{!! Form::label('tags', 'Tags:', array('class' => 'form-spacing-top')) !!}
+			 	{!! Form::label('tags', 'ট্যাগসমূহঃ', array('class' => 'form-spacing-top')) !!}
 			 	<select class="form-control select2-multi" name="tags[]" multiple="multiple" required="">
 			 		@foreach($tags as $tag)
 						<option value="{{ $tag->id }}">{{ $tag->name }}</option>
 					@endforeach
 			 	</select>
 			 	
-				{!! Form::label('featured_image', 'Upload Image: (within 300KB)', ['class' => 'form-spacing-top']) !!}
-				{!! Form::file('featured_image', ['data-parsley-filemaxmegabytes' => '0.3', 'data-parsley-trigger' => 'change', 'data-parsley-filemimetypes' => 'image/jpeg, image/png']) !!}
+				{{-- {!! Form::label('featured_image', 'Upload Image: (within 300KB)', ['class' => 'form-spacing-top']) !!}
+				{!! Form::file('featured_image', ['data-parsley-filemaxmegabytes' => '0.3', 'data-parsley-trigger' => 'change', 'data-parsley-filemimetypes' => 'image/jpeg, image/png']) !!} --}}
 				
-			 	{!! Form::label('body', 'Body:', array('class' => 'form-spacing-top')) !!}
+			 	{!! Form::label('body', 'মূল অংশঃ', array('class' => 'form-spacing-top')) !!}
 			 	{!! Form::textarea('body', null, array('class' => 'form-control','minlength' => '100')) !!}
-
-			 	{!! Form::submit('Create Post', array('class' => 'btn btn-success btn-block', 'style' => 'margin-top:20px;')) !!}
+			 	<br/>
+				<label class="radio-inline"><input type="radio" name="isPublished" value="publish" checked="true">প্রকাশ করুন</label>
+				<label class="radio-inline"><input type="radio" name="isPublished" value="draft">ড্রাফট করুন</label>
+			 	{!! Form::submit('সংরক্ষণ করুন', array('class' => 'btn btn-success btn-block', 'style' => 'margin-top:20px;')) !!}
 			{!! Form::close() !!}
 		</div>
 	</div>
@@ -150,5 +152,11 @@
 
 }(jQuery, app));
 
+	</script>
+
+	<script>
+		$(document).ready(function(){
+		    $('[data-toggle="tooltip"]').tooltip(); 
+		});
 	</script>
 @endsection

@@ -13,27 +13,17 @@ use Auth;
 class CommentsController extends Controller
 {
     public function __construct(){
-        $this->middleware('auth', ['except' => 'store']);
+        $this->middleware('auth');
         $this->middleware('admin', ['only' => 'getReportedComments', 'delete', 'destroy', 'getReportedComments']);
+        parent::__construct();
     }
-    /**
-     * Display a listing of the resource.
-     * DELETED INDEX, CREATE AND SHOW AS THEY ARE NOT NECESSARY
-     * @return \Illuminate\Http\Response
-     */
-
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    
+    
     public function store(Request $request, $post_id)
     {
         $this->validate($request, array(
-            'name'=>'required|max:255',
-            'email'=>'required|email|max:255',
+            'name'=>'required|max:191',
+            'email'=>'required|email|max:191',
             'comment'=>'required|min:5|max:2000'
         ));
 
@@ -48,7 +38,7 @@ class CommentsController extends Controller
 
         $comment->save();
 
-        Session::flash('success', 'মন্তব্য সফল্ভাবে যুক্ত হয়েছ।');
+        Session::flash('success', 'মন্তব্য সফলভাবে যুক্ত হয়েছ।');
 
         //redirect
         return redirect()->route('blog.single', [$post->slug]);
@@ -96,7 +86,6 @@ class CommentsController extends Controller
     public function destroy($id)
     {
         $comment = Comment::find($id);
-        $post_id = $comment->post->id;
 
         $comment->delete();
 

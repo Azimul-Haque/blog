@@ -1,6 +1,6 @@
 @extends('dashboard')
 
-@section('title', 'Blog | All Tags')
+@section('title', 'ব্লগ | ট্যাগসমূহ')
 @section('stylesheet')
 	{!!Html::style('css/parsley.css')!!}
 @endsection

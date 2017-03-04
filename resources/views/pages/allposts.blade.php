@@ -1,30 +1,28 @@
 @extends('dashboard')
 
 @section('title')
-	Blog | All Post ({{$posts->currentPage()}}/{{ceil($posts->total()/$posts->perPage())}})
+	ব্লগ | সকল ব্লগপোস্ট
 @endsection
 @section('stylesheet')
 	{!!Html::style('')!!}
+	<link media="all" type="text/css" rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css">
 @endsection
 
 @section('content')
 
 	<div class="row">
 		<div class="col-md-12">
-			<h1>সকল পোস্ট (সকল ব্লগার)</h1>
+			<h2>সকল পোস্ট (সকল ব্লগার)</h2>
 		</div>
 {{-- 		<div class="col-md-2">
 			<a href="{{route('posts.create')}}" class="btn btn-primary btn btn-block btn-h1-spacing"><i class="fa fa-plus-square" aria-hidden="true"></i> নতুন ব্লগ পোস্ট করুন</a>
 		</div> --}}
-		<div class="col-md-12">
-			<hr>
-		</div>
 	</div>	
 
 	<div class="row">
 		<div class="col-md-12">
 			<div class="table-responsive">
-				<table class="table table-bordered table-condensed table-striped">
+				<table class="table table-striped table-bordered table-condensed" id="allblogpostsTable">
 					<thead>
 						<tr>
 							<th>#</th>
@@ -54,8 +52,15 @@
 									<span class="label label-warning">ফিচারড পোস্ট</span>
 									@endif
 								</p>
-							</td>	
-							<td class="" style="width:15%">{{$post->postedBy}}</td>	
+							</td>
+							<?php
+			                    foreach ($users as $user) {
+			                        if($user->id == $post->postedBy){
+			                          $writtenBy = $user->name;
+			                        }
+			                    }
+			                ?>
+							<td class="" style="width:15%"><a href="{{url('/profile/'.$writtenBy)}}" class="">{{ $writtenBy }} </a></td>	
 							<td>{{ date('F d, Y h:i A', strtotime($post->created_at))}}</td>	
 							<td>{{ date('F d, Y h:i A', strtotime($post->updated_at))}}</td>
 							<td style="width:10%"><a href="{{route('posts.edit', $post->id)}}" class="btn btn-info btn-sm btn-block"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> সম্পাদনা করুন</a></td>
@@ -96,10 +101,6 @@
 				</table>	
 			</div>
 
-			<div class="text-center">
-				{!! $posts->links() !!}
-			</div>
-
 		</div>
 	</div>
 
@@ -107,5 +108,14 @@
 
 @section('script')
 	{!!Html::script('')!!}
-	
+	<script type="text/javascript">
+    $(document).ready(function() {
+      $('#allblogpostsTable').DataTable( {
+        "order": [[ 3, "desc" ]]
+      });
+
+    });
+  </script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/dataTables.bootstrap.min.js"></script>
 @endsection

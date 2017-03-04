@@ -1,7 +1,7 @@
 @extends('dashboard')
 
 @section('title')
-	Blog | All Post
+	ব্লগ | প্রকাশিত ব্লগ
 @endsection
 @section('stylesheet')
 	{!!Html::style('')!!}
