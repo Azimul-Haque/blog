@@ -12,6 +12,7 @@ use App\Category;
 use App\Tag;
 use App\User;
 use App\Message;
+use App\Notification;
 use Validator, Input, Redirect, Session;
 use Auth;
 use Purifier;
@@ -261,4 +262,17 @@ class UserController extends Controller
                     ->withDonors($donors);   
     }
     // blood bank
+
+    // notifications
+    public function getNotifications () {
+        $usersMandN = User::all();
+        $pagenotifications = Notification::orderBy('id', 'desc')
+                                        ->whereBetween('getter_id', [0, Auth::user()->id])
+                                        ->paginate(10);
+
+        return view('notifications.index')
+                    ->withUsersMandN($usersMandN)  
+                    ->withPagenotifications($pagenotifications);   
+    }
+    // notifications
 }

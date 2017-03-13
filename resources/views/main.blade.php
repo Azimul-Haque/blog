@@ -16,21 +16,11 @@
     <title>@yield('title')</title>
     <!-- CHANGE THIS TITLE FOR EACH PAGE -->
     @yield('stylesheet')
-    {!!Html::style('css/styles.css')!!}
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <style type="text/css">
-        /*
-        @font-face {
-        font-family: MyAdorshoLipi;
-        src: url(fonts/AdorshoLipi.ttf);
-        }
-        @font-face {
-            font-family: MyLato;
-            src: url(fonts/Lato-Regular.ttf);
-        }
-        */
-    </style>
+    {!!Html::style('css/styles.css')!!}
+    {!!Html::style('css/device-wise.css')!!}
+    
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -73,7 +63,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="{{ url('/') }}"><b>Blog</b> | Humans of <b>Thakurgaon</b></a>
+          <a class="navbar-brand blogNAME" href="{{ url('/') }}"><b>Blog</b> | Humans of <b>Thakurgaon</b></a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -96,10 +86,100 @@
 
             @if(Auth::check())
       
+            {{-- notification --}}
+            <li class="dropdown">
+              <a href="/" class="dropdown-toggle" id="clickonMessage" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-globe" aria-hidden="true" style="font-size: 18px;"></i> 
+              </a>
+              <ul class="dropdown-menu navDropDownMandN">
+                  @foreach($notifications as $notification)
+                    @if($notification->type == 'comment')
+                      @foreach($usersMandN  as $userMandN)
+                        @if(($notification->setter_id == $userMandN->id) && ($notification->setter_id != Auth::user()->id))
+                          <li>
+                            <a href="{{ url('article/'.$notification->slug) }}" class="navDropDownMandNa">
+                              {{-- image --}}
+                              @if(!$userMandN->image == NULL)
+                              <img class="img-responsive img-circle navDropDownMandNimg" src="{{ asset('images/profilepicture/'.$userMandN->image) }}">
+                              @else
+                              <img class="img-responsive img-circle navDropDownMandNimg" src="{{ asset('images/profile.png') }}">
+                              @endif
+                              {{-- image --}}
+                              <span class="navDropDownMandNtextNotify">
+                                <b>{{ $userMandN->name}}</b> মন্তব্য করেছেন।<br/>
+                                <b>[{{ $notification->post_title }}]</b><br/>
+                                <small>{{ bn_date(date('F d, Y h:i a', strtotime($notification->created_at))) }}</small>
+                              </span>
+                            </a>
+                          </li>
+                          <li role="separator" class="divider"></li>
+                        @endif
+                      @endforeach
+                    @elseif($notification->type == 'reply')
+                      @foreach($usersMandN  as $userMandN)
+                        @if(($notification->setter_id == $userMandN->id) && ($notification->setter_id != Auth::user()->id))
+                          <li>
+                            <a href="{{ url('article/'.$notification->slug) }}" class="navDropDownMandNa">
+                              {{-- image --}}
+                              @if(!$userMandN->image == NULL)
+                              <img class="img-responsive img-circle navDropDownMandNimg" src="{{ asset('images/profilepicture/'.$userMandN->image) }}">
+                              @else
+                              <img class="img-responsive img-circle navDropDownMandNimg" src="{{ asset('images/profile.png') }}">
+                              @endif
+                              {{-- image --}}
+                              <span class="navDropDownMandNtextNotify">
+                                <b>{{ $userMandN->name}}</b> প্রতিমন্তব্য করেছেন।<br/>
+                                <b>[{{ $notification->post_title }}]</b><br/>
+                                <small>{{ bn_date(date('F d, Y h:i a', strtotime($notification->created_at))) }}</small>
+                              </span>
+                            </a>
+                          </li>
+                          <li role="separator" class="divider"></li>
+                        @endif
+                      @endforeach
+                    @elseif($notification->type == 'hits')
+                      <li>  
+                        <a href="{{ url('article/'.$notification->slug) }}" class="navDropDownMandNa">
+                          {{-- image --}}
+                            @if(!Auth::user()->image == NULL)
+                              <img class="img-responsive img-circle navDropDownMandNimg" src="{{ asset('images/profilepicture/'.Auth::user()->image) }}">
+                            @else
+                              <img class="img-responsive img-circle navDropDownMandNimg" src="{{ asset('images/profile.png') }}">
+                            @endif
+                          {{-- image --}}
+                          <span class="navDropDownMandNtextNotify">
+                              <b>{{ $notification->post_title }}</b><br/>
+                              ব্লগপোস্টটি ১০০ বারের অধিক পঠিত হয়েছে! <br/>
+                              <small>{{ bn_date(date('F d, Y h:i a', strtotime($notification->created_at))) }}</small>
+                          </span>
+                        </a>
+                      </li>
+                      <li role="separator" class="divider"></li>
+                    @elseif($notification->type == 'news')
+                      <li>  
+                        <a href="{{ ($notification->slug) }}" target="_blank" class="navDropDownMandNa">
+                          {{-- image --}}
+                              <img class="img-responsive img-circle navDropDownMandNimg" src="{{ asset('images/map_thakurgaon.jpg') }}">
+                          {{-- image --}}
+                          <span class="navDropDownMandNtextNotify">
+                              <b>{{ $notification->post_title }}</b><br/>
+                              <small>{{ bn_date(date('F d, Y h:i a', strtotime($notification->created_at))) }}</small>
+                          </span>
+                        </a>
+                      </li>
+                      <li role="separator" class="divider"></li>
+                    @endif
+                  @endforeach
+                  <li><a href="{{ url('notifications') }}" class="navDropDownMandNa"><center>আরও দেখুন...</center></a></li> 
+              </ul>
+            </li>
+            {{-- notification --}}
+      
             {{-- messages --}}
             <li class="dropdown">
-              <a href="/" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                <i class="fa fa-comment" aria-hidden="true" style="font-size: 18px;"></i> </a>
+              <a href="/" class="dropdown-toggle" id="clickonMessage" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-commenting-o" aria-hidden="true" style="font-size: 18px;"></i> 
+              </a>
               <ul class="dropdown-menu navDropDownMandN">
                   @foreach($messagesMandN  as $messageMandN)
                       <li>
@@ -195,6 +275,7 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     <script src="https://use.fontawesome.com/5dda4c7cc1.js"></script>
+
     @yield('script')
   </body>
 

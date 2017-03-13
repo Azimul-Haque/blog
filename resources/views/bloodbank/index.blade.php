@@ -58,7 +58,7 @@
                           @if($donor->last_donated == NULL || $donor->last_donated == '0000-00-00 00:00:00')
                           <span style="color: lightgrey">তথ্য নেই</span>
                           @else
-                          {{ date('F d, Y', strtotime($donor->last_donated))}}
+                          {{ bn_date(date('F d, Y', strtotime($donor->last_donated))) }}
                           @endif
                         </td>
                         <td> 

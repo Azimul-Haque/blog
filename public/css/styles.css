@@ -1,8 +1,18 @@
+@font-face {
+      font-family: MySolaimanLipi;
+      src: url(/fonts/SolaimanLipi.woff);
+}
+
+html, body, h1, h2, h3, h4, h5, h6, p, div, span, a, b, i, u, strong, 
+table, tr, th, td, label, button, input, textarea,  form, ul, li, ol, option, select {
+    font-family:MySolaimanLipi; sans-serif !important;
+}
+
 a {
   text-decoration: none !important;
 }
 .postTitle{
-    font-family:MyAdorshoLipi;sans-serif !important;
+    font-family:MySolaimanLipi;sans-serif !important;
     color: #00695c;
 
 }
@@ -17,11 +27,11 @@ a {
 }
 
 .postSlug{
-    font-family:MyAdorshoLipi;sans-serif !important;
+    font-family:MySolaimanLipi;sans-serif !important;
 }
 .postBody{
     text-align: justify !important;
-    font-family:MyAdorshoLipi;sans-serif !important;
+    font-family:MySolaimanLipi;sans-serif !important;
     word-wrap: break-word !important;
     font-size: 16px;
 }
@@ -77,7 +87,6 @@ a {
 }
 .author-time{
     font-size: 12px;
-    font-style: italic;
     color: #aaa;
 }
 .comment-content{
@@ -86,7 +95,7 @@ a {
     font-size: 15px;
     line-height: 1.3em;
     text-align: justify !important;
-    font-family:MyAdorshoLipi;sans-serif !important;
+    font-family:MySolaimanLipi;sans-serif !important;
 }
 
 .comments-title{
@@ -98,6 +107,7 @@ a {
 
 .diffForHumans{
     color: #aaa;
+    font-size: 12px;
     /*font-weight: bold;*/
 }
 
@@ -255,7 +265,7 @@ a {
 
 .navDropDownMandNimg {
   height: 60px !important; 
-  width: auto; 
+  width: 60px !important; 
   border: 2px solid lightgrey; 
   float: left;
   margin-right: 10px;
@@ -263,6 +273,12 @@ a {
 
 .navDropDownMandNtext {
   display: inline-block;
+}
+
+.navDropDownMandNtextNotify {
+  margin-top: 4px;
+  display: inline-block;
+  word-wrap: break-word;
 }
 
 .collapse .emojionearea-editor {
@@ -286,9 +302,7 @@ a {
 }
 .replier-time{
     font-size: 11px;
-    font-style: italic;
     color: #aaa;
-
 }
 .reply-content{
     clear: both;
@@ -296,7 +310,7 @@ a {
     font-size: 15px;
     line-height: 1.3em;
     text-align: justify !important;
-    font-family:MyAdorshoLipi;sans-serif !important;
+    font-family:MySolaimanLipi;sans-serif !important;
 }
 
 

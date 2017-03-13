@@ -8,7 +8,10 @@ use App\Http\Requests;
 use Validator, Input, Redirect, Session;
 use App\Commentreply;
 use App\Comment;
+use App\Post;
+use App\Notification;
 use Auth;
+use DateTime;
 
 class CommentreplyController extends Controller
 {
@@ -33,6 +36,28 @@ class CommentreplyController extends Controller
         $commentreply->comment()->associate($comment);
 
         $commentreply->save();
+
+        // count commentsandrepliestcount
+        $post = Post::where('id','=',$comment->post_id)
+                        ->where('isDeleted', '!=', '0')
+                        ->where('isPublished', '=', 'publish')
+                        ->first();
+
+        $post->commentsandrepliestcount = $post->commentsandrepliestcount + 1;
+        $now = new DateTime();
+        $post->commentsandrepliestcount_time = $now;
+        $post->save();
+        // count commentsandrepliestcount
+
+        // notification data
+        $notification = new Notification;
+        $notification->type = 'reply';
+        $notification->setter_id = Auth::user()->id;
+        $notification->getter_id = $post->postedBy;
+        $notification->post_title = $post->title;
+        $notification->slug = $post->slug;
+        $notification->save();
+        // notification data
 
         Session::flash('success', 'প্রতিমন্তব্য সফলভাবে যুক্ত হয়েছ।');
 

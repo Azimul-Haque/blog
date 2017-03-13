@@ -42,9 +42,7 @@
                 @endif
 								
 								<i class="fa fa-caret-left" style="font-size:15px; color: #e3f2fd; margin-top: 5px;"></i><span class="conversationTexts" style="background-color: #e3f2fd ;">{{ $message->message }}
-                 
-
-              </span>
+                </span>
 							</span>
 							@elseif($user->id == Auth::user()->id)
 							<span style="float: right; display: inline-flex;">

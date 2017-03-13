@@ -29,12 +29,36 @@
                     }
                 ?>
 	            <a href="{{url('profile/'.$writtenBy)}}" class="">{{ $writtenBy }} </a>
-	            | <span> {{ date('F d, Y | h:i A', strtotime($post->created_at))}}
-				<i class="diffForHumans">{{ $post->created_at->diffForHumans() }}</i>
-	            </span></h5>
+	            <span>
+                  <i class="fa fa-calendar" aria-hidden="true"></i> {{ bn_date(date('F d, Y', strtotime($post->created_at)))}}
+                  <i class="fa fa-clock-o" aria-hidden="true"></i> {{ bn_date(date('h:i a', strtotime($post->created_at)))}}
+                  <span class="diffForHumans">{{ bn_date($post->created_at->diffForHumans()) }}</span>
+                </span></h5>
 	            <span class="postBody">
-	            	{!!strlen($post->body)>1200? substr($post->body, 0, strpos($post->body, " ", strpos(strip_tags($post->body), " ")+1150))." [...] " : $post->body!!}
-	            	<a href="{{ url('article/'.$post->slug) }}">বাকিটুকু পড়ুন</a>
+	            	@if(strlen($post->body)>1200)
+                  {!! substr($post->body, 0, stripos($post->body, " ", stripos(strip_tags($post->body), " ")+1150))." [...] " !!}
+
+                  {{-- solved the strong, em and p problem --}}
+                  @if(substr_count(substr($post->body, 0, stripos($post->body, " ", stripos(strip_tags($post->body), " ")+1150)), "<strong>") == substr_count(substr($post->body, 0, stripos($post->body, " ", stripos(strip_tags($post->body), " ")+1150)), "</strong>"))
+                  @else
+                    </strong>
+                  @endif
+                  @if(substr_count(substr($post->body, 0, stripos($post->body, " ", stripos(strip_tags($post->body), " ")+1150)), "<em>") == substr_count(substr($post->body, 0, stripos($post->body, " ", stripos(strip_tags($post->body), " ")+1150)), "</em>"))
+
+                  @else
+                    </em>
+                  @endif
+                  @if(substr_count(substr($post->body, 0, stripos($post->body, " ", stripos(strip_tags($post->body), " ")+1150)), "<p>") == substr_count(substr($post->body, 0, stripos($post->body, " ", stripos(strip_tags($post->body), " ")+1150)), "</p>"))
+
+                  @else
+                    </p>
+                  @endif
+                  {{-- solved the strong, em and p problem --}}
+
+                @else
+                  {!! $post->body !!}
+                @endif
+                <a href="{{ url('article/'.$post->slug) }}">বাকিটুকু পড়ুন</a>
 	            </span>
 	            <p></p>
 				
@@ -50,7 +74,7 @@
 	                  </a>
 	                <?php $i++?>
 	              @endforeach 
-	               <span style="margin-left: 5px;">[ <i class="fa fa-eye" aria-hidden="true"></i> {{ $post->hits }} ]</span>
+	               <span style="margin-left: 5px;">[ <i class="fa fa-eye" aria-hidden="true"></i> {{ bn_date($post->hits) }} ]</span>
 	               <span style="margin-left: 5px;">[ <i class="fa fa-comments" aria-hidden="true"></i> 
 					  <?php $total = 0?>
 	                  @foreach($post->comments as $comment)
@@ -58,7 +82,7 @@
 	                      $total = $total + $comment->commentreplies->count();
 	                    ?>
 	                  @endforeach
-	                  {{ $post->comments()->count() + $total }}
+	                  {{ bn_date($post->comments()->count() + $total) }}
 
 	               ]</span>
 	            </span>
@@ -81,9 +105,9 @@
 				<tbody>
 				@foreach ($taglist as $tag)
 					<tr>
-						<th>{{ $tag->id }}</th>
+						<th>{{ bn_date($tag->id) }}</th>
 						<th><a href="/tag/{{$tag->name}}/">{{ $tag->name }}</a></th>
-						<th>{{ $tag->posts()->count() }}</th>
+						<th>{{ bn_date($tag->posts()->count()) }}</th>
 					</tr>
 				@endforeach
 				</tbody>

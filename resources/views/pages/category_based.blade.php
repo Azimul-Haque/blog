@@ -23,9 +23,9 @@
 					<tbody>
 					@foreach ($categories as $category)
 						<tr>
-							<th>{{ $category->id }}</th>
+							<th>{{ bn_date($category->id) }}</th>
 							<th><a href="{{url('/category/'.$category->name)}}">{{ $category->name }}</a></th>
-							<th>{{ $category->posts()->count() }}</th>
+							<th>{{ bn_date($category->posts()->count()) }}</th>
 						</tr>
 					@endforeach
 					</tbody>
@@ -48,9 +48,9 @@
 					<tbody>
 					@foreach ($tags as $tag)
 						<tr>
-							<th>{{ $tag->id }}</th>
+							<th>{{ bn_date($tag->id) }}</th>
 							<th><a href="{{url('/tag/'.$tag->name)}}">{{ $tag->name }}</a></th>
-							<th>{{ $tag->posts()->count() }}</th>
+							<th>{{ bn_date($tag->posts()->count()) }}</th>
 						</tr>
 					@endforeach
 					</tbody>

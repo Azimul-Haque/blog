@@ -96,6 +96,16 @@ Route::get('bloodbank', ['uses' => 'UserController@getBloodbank', 'as' => 'blood
 Route::get('search', ['uses' => 'SearchController@getResult', 'as' => 'search.search']);
 // SearchController
 
+// Notification Controller via UserController
+Route::get('notifications', ['uses' => 'UserController@getNotifications', 'as' => 'notifiactions.read']);
+// Notification Controller via UserController
+
+// NotificationController for admin
+Route::resource('adminnotifications', 'NotificationController');
+// NotificationController for admin
+
+
+
 
 
 //Clear Cache facade value:

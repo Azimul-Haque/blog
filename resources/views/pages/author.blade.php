@@ -25,6 +25,58 @@
            	  	  			<th style="width: 30%">ব্লগারঃ</th>
            	  	  			<td>{{ $user->name }}</td>
            	  	  		</tr>
+                      <tr>
+                        <th>ব্লগ লিখেছেনঃ</th>
+                        <td>{{ bn_date($user->posts->count()) }} টি</td>
+                      </tr>
+                      <tr>
+                        <th>মন্তব্য করেছেনঃ</th>
+                        <td>
+                          <?php 
+                            $totalComments = 0;
+                            $totalCommentreplies = 0;
+                          ?>
+                          @foreach($allposts as $post)
+                            @foreach($post->comments as $comment)
+                              @if($comment->email == $user->email)
+                                <?php $totalComments = $totalComments + 1;?>
+                              @endif
+                              @foreach($comment->commentreplies as $commentreply)
+                                @if($commentreply->email == $user->email)
+                                  <?php $totalCommentreplies = $totalCommentreplies + 1; ?>
+                                @endif
+                              @endforeach
+                            @endforeach
+                          @endforeach
+                          {{ bn_date($totalComments + $totalCommentreplies) }}   টি
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>মন্তব্য পেয়েছেনঃ</th>
+                        <td>
+                          <?php 
+                            $totalComments = 0;
+                            $totalCommentreplies = 0;
+                          ?>
+                          @foreach($user->posts as $post)
+                            @foreach($post->comments as $comment)
+                              @if($comment->email != $user->email)
+                                <?php $totalComments = $totalComments + 1;?>
+                              @endif
+                              @foreach($comment->commentreplies as $commentreply)
+                                @if($commentreply->email != $user->email)
+                                  <?php $totalCommentreplies = $totalCommentreplies + 1; ?>
+                                @endif
+                              @endforeach
+                            @endforeach
+                          @endforeach
+                          {{ bn_date($totalComments + $totalCommentreplies) }}   টি
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>ব্লগে যোগদান করেছেনঃ</th>
+                        <td>{{ bn_date($user->created_at->diffForHumans()) }}</td>
+                      </tr>
            	  	  		<tr>
            	  	  			<th>ফেইসবুক লিঙ্কঃ</th>
            	  	  			<td><a href="{{ $user->fb }}" target="_blank">ক্লিক করুন</a></td>
@@ -43,7 +95,7 @@
                           @if($user->last_donated == NULL || $user->last_donated == '0000-00-00 00:00:00')
                           <span style="color: lightgrey">তথ্য নেই</span>
                           @else
-                          {{ date('F d, Y', strtotime($user->last_donated))}} 
+                          {{ bn_date(date('F d, Y', strtotime($user->last_donated)))}} 
                           @endif
                         </td>
                       </tr>
@@ -75,14 +127,7 @@
                       @else
 
                       @endif
-                      <tr>
-                        <th>ব্লগ লিখেছেনঃ</th>
-                        <td>{{ $posts->count() }} টি</td>
-                      </tr>
-                      <tr>
-                        <th>ব্লগে যোগদান করেছেনঃ</th>
-                        <td>{{ $user->created_at->diffForHumans() }}</td>
-                      </tr>
+                      
            	  	  	</thead>
            	  	  </table>
                   @if(Auth::check())
@@ -125,13 +170,36 @@
                 ?>
 	            <a href="{{url('/profile/'.$writtenBy)}}" class="">{{ $writtenBy }} </a> 
 
-	            | <span> {{ date('F d, Y | h:i A', strtotime($post->created_at))}}
-	            <i class="diffForHumans">{{ $post->created_at->diffForHumans() }}</i>
-	            </span></h5>
+	            <span>
+                  <i class="fa fa-calendar" aria-hidden="true"></i> {{ bn_date(date('F d, Y', strtotime($post->created_at)))}}
+                  <i class="fa fa-clock-o" aria-hidden="true"></i> {{ bn_date(date('h:i a', strtotime($post->created_at)))}}
+                  <span class="diffForHumans">{{ bn_date($post->created_at->diffForHumans()) }}</span>
+                </span></h5>
 	            <p class="postBody">
+                @if(strlen($post->body)>1200)
+                  {!! substr($post->body, 0, stripos($post->body, " ", stripos(strip_tags($post->body), " ")+1150))." [...] " !!}
 
-	            {!!strlen($post->body)>1200? substr($post->body, 0, strpos($post->body, " ", strpos(strip_tags($post->body), " ")+1150))." [...] " : $post->body!!}
-	            <a href="{{ url('article/'.$post->slug) }}">বাকিটুকু পড়ুন</a>
+                  {{-- solved the strong, em and p problem --}}
+                  @if(substr_count(substr($post->body, 0, stripos($post->body, " ", stripos(strip_tags($post->body), " ")+1150)), "<strong>") == substr_count(substr($post->body, 0, stripos($post->body, " ", stripos(strip_tags($post->body), " ")+1150)), "</strong>"))
+                  @else
+                    </strong>
+                  @endif
+                  @if(substr_count(substr($post->body, 0, stripos($post->body, " ", stripos(strip_tags($post->body), " ")+1150)), "<em>") == substr_count(substr($post->body, 0, stripos($post->body, " ", stripos(strip_tags($post->body), " ")+1150)), "</em>"))
+
+                  @else
+                    </em>
+                  @endif
+                  @if(substr_count(substr($post->body, 0, stripos($post->body, " ", stripos(strip_tags($post->body), " ")+1150)), "<p>") == substr_count(substr($post->body, 0, stripos($post->body, " ", stripos(strip_tags($post->body), " ")+1150)), "</p>"))
+
+                  @else
+                    </p>
+                  @endif
+                  {{-- solved the strong, em and p problem --}}
+
+                @else
+                  {!! $post->body !!}
+                @endif
+                <a href="{{ url('article/'.$post->slug) }}">বাকিটুকু পড়ুন</a>
 	            </p>
 	            <span><i class="fa fa-folder-open-o" aria-hidden="true"></i> বিষয়ঃ <a href="/category/{{$post->category->name}}/">{{ $post->category->name }}</a>
 	              </span> | 
@@ -145,14 +213,14 @@
 	                    </a>
 	                  <?php $i++?>
 	                @endforeach 
-	                 <span style="margin-left: 5px;">[ <i class="fa fa-eye" aria-hidden="true"></i> {{ $post->hits }} ]</span>
+	                 <span style="margin-left: 5px;">[ <i class="fa fa-eye" aria-hidden="true"></i> {{ bn_date($post->hits) }} ]</span>
 	                 <span style="margin-left: 5px;">[ <i class="fa fa-comments" aria-hidden="true"></i> <?php $total = 0?>
                     @foreach($post->comments as $comment)
                       <?php
                         $total = $total + $comment->commentreplies->count();
                       ?>
                     @endforeach
-                    {{ $post->comments()->count() + $total }} 
+                    {{ bn_date($post->comments()->count() + $total) }} 
 
                     ]</span>
 	              </span>

@@ -10,6 +10,7 @@ use App\Tag;
 use App\User;
 use App\Comment;
 use App\Commentreply;
+use App\Notification;
 use DB;
 
 class BlogController extends Controller
@@ -19,8 +20,10 @@ class BlogController extends Controller
     }
 
     public function getSingle($slug) {
-        $users = User::orderBy('id', 'desc')->get();
-    	$post = Post::where('slug','=',$slug)
+        $users = User::all();
+    	
+        // count hit
+        $post = Post::where('slug','=',$slug)
                         ->where('isDeleted', '!=', '0')
                         ->where('isPublished', '=', 'publish')
                         ->first();
@@ -28,22 +31,39 @@ class BlogController extends Controller
     	$post->hits = $post->hits + 1;
 
         $post->save();
+        // count hit
+
+        // notification data
+        if($post->hits == 100) {
+            $notification = new Notification;
+            $notification->type = 'hits';
+            $notification->setter_id = $post->id;
+            $notification->getter_id = $post->postedBy;
+            $notification->post_title = $post->title;
+            $notification->slug = $post->slug;
+            $notification->save();
+        }
+        // notification data
 
         $populars = Post::orderBy('hits', 'desc')
                                 ->where('isDeleted', '!=', '0')
-                                ->take(10)
+                                ->take(5)
                                 ->get();
         $bloggers = User::orderBy('id', 'desc')->first();                        
         $totalpost = Post::orderBy('id', 'desc')->first();
         $totalcomment = Comment::orderBy('id', 'desc')->first();
-        $recentcomments = Comment::orderBy('id', 'desc')
+        $recentcomments = Post::orderBy('commentsandrepliestcount_time', 'desc') // new version
+                                ->where('commentsandrepliestcount_time', '!=', '0000-00-00 00:00:00')
+                                ->where('isDeleted', '!=', '0')
+                                ->where('isPublished', '=', 'publish')
                                 ->take(10)
                                 ->get();
-        $mostreads = Comment::select('post_id', DB::raw('COUNT(post_id) AS occurrences'))
-                                ->groupBy('post_id')
-                                ->orderBy('occurrences', 'DESC')
+        $mostreads = Post::orderBy('commentsandrepliestcount', 'DESC') // new version
+                                ->where('commentsandrepliestcount', '!=', '0')
+                                ->where('isDeleted', '!=', '0')
+                                ->where('isPublished', '=', 'publish')
                                 ->take(5)
-                                ->get(); 
+                                ->get();
         $totalcommentreply = Commentreply::orderBy('id', 'desc')->first();                
 
         

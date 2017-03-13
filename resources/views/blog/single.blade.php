@@ -39,7 +39,7 @@
 	?>
 	<meta property="og:title" content="{{ $post->title.' | লিখেছেনঃ '.$writtenBy }}"/>
     <meta property="og:type" content="article"/>
-    <meta property="og:url" content="{{ url($post->slug) }}"/>
+    <meta property="og:url" content="{{ url('article/'.$post->slug) }}"/>
     <?php
 	    foreach ($users as $user) {
 	    	if($user->id == $post->postedBy){
@@ -54,9 +54,12 @@
     <meta property="og:image" content="{{ asset($image) }}"/>
     <meta property="og:site_name" content="ব্লগ | হিউম্যানস অব ঠাকুরগাঁও"/>
 	<meta property="fb:admins" content="orbachinujbuk"/>
-	<meta property="fb:app_id" content="1654451871469307"/>
+	<meta property="fb:app_id" content="540030616188468"/>
+	<meta property="fb:pages" content="humansofthakurgaon" /> 
+	<meta property="og:image:width" content="255">
+	<meta property="og:image:height" content="255">
     <meta name="description" property="og:description" content="{{ strip_tags($post->body) }}"/>
-    <link rel="canonical"  href="{{ url($post->slug) }}">
+    <link rel="canonical"  href="{{ url('article/'.$post->slug) }}">
 @endsection
 
 @section('content')
@@ -82,9 +85,11 @@
 	                }
 	              ?>
 				<a href="{{url('profile/'.$writtenBy)}}" class="">{{ $writtenBy }} </a>
-				| <span> {{ date('F d, Y | h:i A', strtotime($post->created_at))}} 
-				<i class="diffForHumans">{{ $post->created_at->diffForHumans() }}</i>	
-				</span></h5>
+				<span>
+                  <i class="fa fa-calendar" aria-hidden="true"></i> {{ bn_date(date('F d, Y', strtotime($post->created_at)))}}
+                  <i class="fa fa-clock-o" aria-hidden="true"></i> {{ bn_date(date('h:i a', strtotime($post->created_at)))}}
+                  <span class="diffForHumans">{{ bn_date($post->created_at->diffForHumans()) }}</span>
+                </span></h5>
 				<span class="postBody">
 					{!! $post->body!!} 
 				</span><br/>
@@ -100,7 +105,7 @@
 	                  </a>
 	                <?php $i++?>
 	              @endforeach 
-	               <span style="margin-left: 5px;">[ <i class="fa fa-eye" aria-hidden="true"></i> {{ $post->hits }} ]</span>
+	               <span style="margin-left: 5px;">[ <i class="fa fa-eye" aria-hidden="true"></i> {{ bn_date($post->hits) }} ]</span>
 	               <span style="margin-left: 5px;">[ <i class="fa fa-comments" aria-hidden="true"></i> 
 						<?php $total = 0?>
 						@foreach($post->comments as $comment)
@@ -108,7 +113,7 @@
 								$total = $total + $comment->commentreplies->count();
 							?>
 						@endforeach
-						{{ $post->comments()->count() + $total }}
+						{{ bn_date($post->comments()->count() + $total) }}
 	               		]
 	               	</span>
 	            </span> 
@@ -148,7 +153,7 @@
 								$total = $total + $comment->commentreplies->count();
 							?>
 						@endforeach
-						{{ $post->comments()->count() + $total }}
+						{{ bn_date($post->comments()->count() + $total) }}
 						টি মন্তব্য ও প্রতিমন্তব্য
 					</h2>
 					<?php $commentNum = 0; ?>
@@ -166,7 +171,7 @@
 										<div class="author-name">
 										<h4><a href="{{ url('profile/'.$user->name) }}">{{ $user->name }}</a></h4>
 										<span class="author-time">{{ date('F d, Y h:i A', strtotime($comment->created_at)) }}
-										, <i class="diffForHumans">{{ $comment->created_at->diffForHumans() }}</i>	
+										, <span class="diffForHumans">{{ bn_date($comment->created_at->diffForHumans()) }}</span>	
 										</span>
 										</div>
 									</div>
@@ -213,7 +218,7 @@
 												<div class="replier-name">
 													<span class="replier-just-name"><a href="{{ url('profile/'.$user->name) }}">{{ $user->name }}</a></span><br>
 													<span class="replier-time">{{ date('M d, Y h:i A', strtotime($commentreply->created_at)) }}
-													, <i class="diffForHumans">{{ $commentreply->created_at->diffForHumans() }}</i>	
+													, <span clspanass="diffForHumans">{{ bn_date($commentreply->created_at->diffForHumans()) }}</span>	
 													</span>
 												</div>
 										</div>
@@ -267,6 +272,8 @@
 					{{ Form::close() }}
 				</div>
 			</div>   <br/>  
+
+
             
         </div>
 
@@ -274,9 +281,9 @@
             <div class="panel" style="background: #6ED66E;">
               <div class="panel-body">
                 <span style="font-size: 20px;"><b>ব্লগের তথ্য</b></span><br/>
-                <a href="{{ url('bloggers/list') }}" class="faq"><span style="font-size: 16px;"><i class="fa fa-users" aria-hidden="true"></i> মোট ব্লগারঃ {{ $bloggers->id }} জন </span></a><br/>
-                <span style="font-size: 16px;"><i class="fa fa-clipboard" aria-hidden="true"></i> সর্বমোট ব্লগপোস্টঃ {{ $totalpost->id }} টি</span><br/>
-                <span style="font-size: 16px;"><i class="fa fa-commenting" aria-hidden="true"></i> সর্বমোট মন্তব্যঃ {{ $totalcomment->id + $totalcommentreply->id }} টি</span>
+                <a href="{{ url('bloggers/list') }}" class="faq"><span style="font-size: 16px;"><i class="fa fa-users" aria-hidden="true"></i> মোট ব্লগারঃ {{ bn_date($bloggers->id) }} জন </span></a><br/>
+                <span style="font-size: 16px;"><i class="fa fa-clipboard" aria-hidden="true"></i> সর্বমোট ব্লগপোস্টঃ {{ bn_date($totalpost->id) }} টি</span><br/>
+                <span style="font-size: 16px;"><i class="fa fa-commenting" aria-hidden="true"></i> সর্বমোট মন্তব্যঃ {{ bn_date($totalcomment->id + $totalcommentreply->id) }} টি</span>
               </div>
             </div>
 
@@ -299,24 +306,40 @@
             <div class="panel" style="background: #B0FCB0;">
               <div class="panel-body">
                 <span style="font-size: 25px;"><b>সাম্প্রতিক মন্তব্য</b></span>
-                @foreach ($recentcomments as $recentcomment)
+               @foreach ($recentcomments as $recentcomment)
                     <div style="border-bottom: 1px solid #6ED66E; padding-top: 5px;">
-                      <a href="{{url('article/'.$recentcomment->post->slug)}}" class="postTitle" style="font-size: 20px;">{{ $recentcomment->post->title }}</a></br>
+                      <a href="{{url('article/'.$recentcomment->slug)}}" class="postTitle" style="font-size: 20px;">{{ $recentcomment->title }}</a></br>
                       <?php
                         foreach ($users as $user) {
-                          if($user->id == $recentcomment->post->postedBy){
+                          if($user->id == $recentcomment->postedBy){
                             $writtenBy = $user->name;
                           }
                         }
                       ?>
-                      <small><strong><i class="fa fa-user" aria-hidden="true"></i> <a href="{{url('profile/'.$writtenBy)}}" class="">{{ $writtenBy }} </a></strong></small>
+                      <small><strong><i class="fa fa-user" aria-hidden="true"></i> <a href="{{url('profile/'.$writtenBy)}}" class="">{{ $writtenBy }} </a></strong>
+                        <span style="color: grey; float: right;">{{ $recentcomment->commentsandrepliestcount_time ? bn_date($recentcomment->commentsandrepliestcount_time->diffForHumans()) : ''}}</span>
+                      </small>
                     </div>
                 @endforeach
               </div>
             </div>
+			
+			{{-- facebook page --}}
+            <div class="fb-page panel" data-href="https://www.facebook.com/bloghumansofthakurgaon/" data-tabs="timeline" data-height="200" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/bloghumansofthakurgaon/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/bloghumansofthakurgaon/">ব্লগ I হিউম্যানস অব ঠাকুরগাঁও</a></blockquote></div><br/>
+            {{-- facebook page --}}
+
         </div>
        
         <div class="col-md-3">
+
+    	  <div class="panel" style="background: #B0FCB0;">
+              <div class="panel-body">
+                আজ {{  bn_date(date('l')) }}, সময় {{  bn_date(date('h:i a')) }}<br/>
+                <script type="text/javascript" src="http://bangladate.appspot.com/index2.php"></script><br/> 
+                {{  bn_date(date('d M Y')) }} খ্রিস্টাব্দ
+              </div>
+          </div>
+
           <div class="panel" style="background: #B0FCB0;">
               <div class="panel-body">
                 <!-- search -->
@@ -368,18 +391,18 @@
               <div class="panel-body">
                 <span style="font-size: 25px;"><b>আলোচিত ব্লগ</b></span>
                 @foreach ($mostreads as $mostread)
-                    <div style="border-bottom: 1px solid #6ED66E; padding-top: 5px;">
-                      <a href="{{url('article/'.$mostread->post->slug)}}" class="postTitle" style="font-size: 20px;">{{ $mostread->post->title }}</a></br>
-                      <?php
-                        foreach ($users as $user) {
-                          if($user->id == $mostread->post->postedBy){
-                            $writtenBy = $user->name;
+                      <div style="border-bottom: 1px solid #6ED66E; padding-top: 5px;">
+                        <a href="{{url('article/'.$mostread->slug)}}" class="postTitle" style="font-size: 20px;">{{ $mostread->title }}</a></br>
+                        <?php
+                          foreach ($users as $user) {
+                            if($user->id == $mostread->postedBy){
+                              $writtenBy = $user->name;
+                            }
                           }
-                        }
-                      ?>
-                      <small><strong><i class="fa fa-user" aria-hidden="true"></i> <a href="{{url('profile/'.$writtenBy)}}" class="">{{ $writtenBy }} </a></strong></small>
-                    </div>
-                @endforeach
+                        ?>
+                        <small><strong><i class="fa fa-user" aria-hidden="true"></i> <a href="{{url('profile/'.$writtenBy)}}" class="">{{ $writtenBy }} </a></strong></small>
+                      </div>
+                  @endforeach
               </div>
             </div>  
         </div>

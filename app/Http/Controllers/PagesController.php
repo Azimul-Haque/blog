@@ -11,6 +11,7 @@ use App\Tag;
 use App\User;
 use App\Comment;
 use App\Commentreply;
+use App\Devicetokentable;
 use Mail;
 
 
@@ -22,7 +23,7 @@ class PagesController extends Controller {
     }
   
 	public function getIndex() {
-        $users = User::orderBy('id', 'desc')->get();
+        $users = User::all();
 		$posts = Post::orderBy('created_at', 'desc')
                                 ->where('isDeleted', '!=', '0')
                                 ->where('isPublished', '=', 'publish')
@@ -30,21 +31,26 @@ class PagesController extends Controller {
         $populars = Post::orderBy('hits', 'desc')
                                 ->where('isDeleted', '!=', '0')
                                 ->where('isPublished', '=', 'publish')
-                                ->take(10)
+                                ->take(5)
                                 ->get();                        
         $bloggers = User::orderBy('id', 'desc')->first();                        
         $totalpost = Post::orderBy('id', 'desc')->first();
         $totalcomment = Comment::orderBy('id', 'desc')->first();
         $featured = Post::where('featured', '=', 'YES')->first();
-        $recentcomments = Comment::orderBy('id', 'desc')
+
+        $recentcomments = Post::orderBy('commentsandrepliestcount_time', 'desc') // new version
+                                ->where('commentsandrepliestcount_time', '!=', '0000-00-00 00:00:00')
+                                ->where('isDeleted', '!=', '0')
+                                ->where('isPublished', '=', 'publish')
                                 ->take(10)
                                 ->get();
-        $mostreads = Comment::select('post_id', DB::raw('COUNT(post_id) AS occurrences'))
-                                ->groupBy('post_id')
-                                ->orderBy('occurrences', 'DESC')
+        $mostreads = Post::orderBy('commentsandrepliestcount', 'DESC') // new version
+                                ->where('commentsandrepliestcount', '!=', '0')
+                                ->where('isDeleted', '!=', '0')
+                                ->where('isPublished', '=', 'publish')
                                 ->take(5)
                                 ->get();
-        $totalcommentreply = Commentreply::orderBy('id', 'desc')->first();                                           
+        $totalcommentreply = Commentreply::orderBy('id', 'desc')->first();                                         
         
                        
         return view('pages.welcome')
@@ -141,11 +147,14 @@ class PagesController extends Controller {
                                 ->where('isDeleted', '!=', '0')
                                 ->where('isPublished', '=', 'publish')
                                 ->get(); // it will be 15
-                       
+
+        $allposts = Post::all();
+
         return view('pages.author')
             ->withUsers($users)
             ->withUser($user)
-            ->withPosts($posts);
+            ->withPosts($posts)
+            ->withAllposts($allposts);
     }
 
     public function getAllBloggersAtHomePage () {

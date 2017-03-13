@@ -19,6 +19,12 @@ class Post extends Model
     }
 
     public function user(){
-	    return $this->hasOne('App\User', 'postedBy', 'id');
+	    return $this->belongsTo('App\User', 'id', 'postedBy');
 	}
+
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'commentsandrepliestcount_time'
+    ];
 }
