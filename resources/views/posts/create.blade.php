@@ -19,7 +19,9 @@
 			  image_class_list: [
 			    {title: 'Responsive', value: 'img-responsive'}
 			  ],
-     		   image_dimensions: false,
+     		  image_dimensions: false,
+     		  extended_valid_elements : 'iframe[src|frameborder|style|scrolling|class|width|height|n
+     		  ame|align|allowfullscreen]', 
 		});
 	 </script>
 @endsection
@@ -63,6 +65,19 @@
 				<label class="radio-inline"><input type="radio" name="isPublished" value="draft">ড্রাফট করুন</label>
 			 	{!! Form::submit('সংরক্ষণ করুন', array('class' => 'btn btn-success btn-block', 'style' => 'margin-top:20px;')) !!}
 			{!! Form::close() !!}
+		</div>
+		<div class="col-md-4">
+			<div class="well">
+				Youtube ভিডিও যোগ করবার জন্যঃ <br/>
+				মূল অংশ-এর &lt;&gt; (Source code ) বাটনে ক্লিক করে HTML-এর iframe অ্যাট্রিবিউট ব্যবহার করে ইউটউব ভিডিও যোগ করুন। কোড ফরম্যাটটি হবে এরকমঃ <br/><br/>
+				<div class="panel">
+					<div  class="panel-body" style="font-family: courier !important; word-wrap: break-word !important;">
+						&lt;div class="youtibecontainer"&gt;<br/>
+							&lt;iframe src="https://www.youtube.com/embed/1234...90" frameborder="0" class="youtubeiframe"&gt;&lt;/iframe&gt;<br/>
+						&lt;/div&gt;
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 

@@ -267,7 +267,8 @@ class UserController extends Controller
     public function getNotifications () {
         $usersMandN = User::all();
         $pagenotifications = Notification::orderBy('id', 'desc')
-                                        ->whereBetween('getter_id', [0, Auth::user()->id])
+                                        ->where('getter_id', 0) //->whereBetween('getter_id', [0, Auth::user()->id])
+                                        ->orWhere('getter_id', Auth::user()->id)
                                         ->paginate(10);
 
         return view('notifications.index')

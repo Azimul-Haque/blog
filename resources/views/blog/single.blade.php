@@ -3,6 +3,7 @@
 <?php $titleTag = htmlspecialchars($post->title); ?>
 @section('title', "ব্লগ | $titleTag")
 @section('stylesheet')
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	{!!Html::style('')!!}
 	{!!Html::style('css/parsley.css')!!}
 	{!!Html::style('css/emojionearea.min.css')!!}
@@ -161,7 +162,7 @@
 					<?php $commentNum++; ?>
 						<div class="comment">
 								@foreach($users as $user)
-									@if($comment->email === $user->email)
+									@if($comment->email == $user->email)
 									<div class="author-info">
 										@if(!$user->image == NULL)
 							                <img class="img-responsive img-circle author-image" src="{{ asset('images/profilepicture/'.$user->image) }}">
@@ -170,12 +171,35 @@
 							            @endif
 										<div class="author-name">
 										<h4><a href="{{ url('profile/'.$user->name) }}">{{ $user->name }}</a></h4>
+										
 										<span class="author-time">{{ date('F d, Y h:i A', strtotime($comment->created_at)) }}
-										, <span class="diffForHumans">{{ bn_date($comment->created_at->diffForHumans()) }}</span>	
+										, <span class="diffForHumans">{{ bn_date($comment->created_at->diffForHumans()) }}</span>
+										
+										@if(Auth::check())
+										@if($comment->email == Auth::user()->email)
+											{{-- <button style="float: right; margin-left: 4px;" class="btn btn-xs btn-default editCommentBtn" id="deleteCommentBtn{{$commentNum}}"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>  --}}
+											<button style="float: right; margin-left: 4px;" class="btn btn-xs btn-default" id="editCommentBtn{{$commentNum}}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button> 
+										@endif
+										@endif
+
 										</span>
 										</div>
 									</div>
-									<div class="comment-content">{{ $comment->comment }}</div>
+									<div class="comment-content" id="commentText{{$commentNum}}">{{ $comment->comment }}
+									</div>
+									{{ Form::open(['route' => ['comments.update', $comment->id], 'method' => 'PATCH', 'data-parsley-validate' => '', 'id' => 'editCommentForm'.$commentNum, 'class' => 'comment-content']) }}
+
+										{{ Form::textarea('comment', $comment->comment, ['class' => 'form-control',  'rows' => '3', 'required' => '', 'data-parsley-required-message' => 'কিছু তো মন্তব্যে লিখুন!', 'placeholder' => 'প্রতিমন্তব্য লিখুন', 'id' => 'commentEdit'.$commentNum]) }}
+										{{ Form::submit('হালনাগাদ ও প্রকাশ করুন', ['class' => 'btn btn-success btn-sm btn-block']) }}
+									{{ Form::close() }}
+
+									<script type="text/javascript">
+										$("#editCommentForm{{$commentNum}}").hide();
+										$("#editCommentBtn{{$commentNum}}").click(function() {
+											$("#editCommentForm{{$commentNum}}").show();
+											$("#commentText{{$commentNum}}").hide();
+										});
+									</script>
 									@endif
 								@endforeach
 
@@ -218,11 +242,31 @@
 												<div class="replier-name">
 													<span class="replier-just-name"><a href="{{ url('profile/'.$user->name) }}">{{ $user->name }}</a></span><br>
 													<span class="replier-time">{{ date('M d, Y h:i A', strtotime($commentreply->created_at)) }}
-													, <span clspanass="diffForHumans">{{ bn_date($commentreply->created_at->diffForHumans()) }}</span>	
+													, <span clspanass="diffForHumans">{{ bn_date($commentreply->created_at->diffForHumans()) }}</span>
+													@if(Auth::check())
+													@if($commentreply->email == Auth::user()->email)
+														{{-- <button style="float: right; margin-left: 4px;" class="btn btn-xs btn-default editCommentBtn" id="deleteCommentReplyBtn{{$commentreply->id}}"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>  --}}
+														<button style="float: right; margin-left: 4px;" class="btn btn-xs btn-default" id="editCommentReplyBtn{{$commentreply->id}}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button> 
+													@endif
+													@endif
 													</span>
 												</div>
 										</div>
-										<div class="reply-content">{{ $commentreply->commentreply }}</div>
+										<div class="reply-content" id="commentReplyText{{$commentreply->id}}">{{ $commentreply->commentreply }}</div>
+
+										{{ Form::open(['route' => ['commentreplies.update', $commentreply->id], 'method' => 'PATCH', 'data-parsley-validate' => '', 'id' => 'editCommentReplyForm'.$commentreply->id, 'class' => 'reply-content']) }}
+
+											{{ Form::textarea('commentreply', $commentreply->commentreply, ['class' => 'form-control',  'rows' => '3', 'required' => '', 'data-parsley-required-message' => 'কিছু তো মন্তব্যে লিখুন!', 'placeholder' => 'প্রতিমন্তব্য লিখুন', 'id' => 'replyEdit'.$commentreply->id]) }}
+											{{ Form::submit('হালনাগাদ ও প্রকাশ করুন', ['class' => 'btn btn-success btn-sm btn-block']) }}
+										{{ Form::close() }}
+
+										<script type="text/javascript">
+											$("#editCommentReplyForm{{$commentreply->id}}").hide();
+											$("#editCommentReplyBtn{{$commentreply->id}}").click(function() {
+												$("#editCommentReplyForm{{$commentreply->id}}").show();
+												$("#commentReplyText{{$commentreply->id}}").hide();
+											});
+										</script>
 									</div>
 								@endif
 							@endforeach
@@ -441,7 +485,7 @@
 	      tonesStyle: "square"
 	    });
 
-	    // multiple replies
+	    // multiple replies, edit comments, edit replies
 	    var i = 1;
 		for(i; i<={{  $post->comments->count() }}; i++) {
 			$("#comment"+i).emojioneArea({
@@ -449,8 +493,26 @@
 		      filtersPosition: "bottom",
 		      tonesStyle: "square"
 		    });
+
+		    $("#commentEdit"+i).emojioneArea({
+		      pickerPosition: "top",
+		      filtersPosition: "bottom",
+		      tonesStyle: "square"
+		    });
 	    }
-	    // multiple replies
+
+	    var j = 1;
+		for(j; j<={{  $totalcommentreply->id }}; j++) {
+		    $("#replyEdit"+j).emojioneArea({
+		      pickerPosition: "top",
+		      filtersPosition: "bottom",
+		      tonesStyle: "square"
+		    });
+	    }
+
+
+	    // multiple replies, edit comments, edit replies
+
 	  });
 
 	  

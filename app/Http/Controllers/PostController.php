@@ -107,7 +107,7 @@ class PostController extends Controller {
         $post->postedBy = Auth::user()->id;
         $post->slug = $request->slug;
         $post->category_id = $request->category_id;
-        $post->body = Purifier::clean($request->body);
+        $post->body = Purifier::clean($request->body, 'youtube');
 
         // image upload
         if($request->hasFile('featured_image')) {
@@ -238,7 +238,7 @@ class PostController extends Controller {
        $post->title = $request->input('title');
        $post->slug = $request->input('slug');
        $post->category_id = $request->input('category_id');
-       $post->body = Purifier::clean($request->input('body'));
+       $post->body = Purifier::clean($request->input('body'), 'youtube');
        $post->isPublished = $request->isPublished;
 
        $post->save();

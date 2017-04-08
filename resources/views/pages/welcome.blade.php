@@ -271,7 +271,7 @@
             <div class="panel" style="background: #B0FCB0;">
               <div class="panel-body">
                 <span style="font-size: 25px;"><b>সর্বাধিক পঠিত</b></span>
-                @foreach ($populars as $popular)
+                @foreach ($populars->sortByDesc('hits') as $popular)
                     <div style="border-bottom: 1px solid #6ED66E; padding-top: 5px;">
                       <a href="{{url('article/'.$popular->slug)}}" class="postTitle" style="font-size: 20px;">{{ $popular->title }}</a></br>
                       <?php
@@ -292,7 +292,7 @@
             <div class="panel" style="background: #B0FCB0;">
               <div class="panel-body">
                 <span style="font-size: 25px;"><b>আলোচিত ব্লগ</b></span>
-                  @foreach ($mostreads as $mostread)
+                  @foreach ($mostreads->sortByDesc('commentsandrepliestcount') as $mostread)
                       <div style="border-bottom: 1px solid #6ED66E; padding-top: 5px;">
                         <a href="{{url('article/'.$mostread->slug)}}" class="postTitle" style="font-size: 20px;">{{ $mostread->title }}</a></br>
                         <?php

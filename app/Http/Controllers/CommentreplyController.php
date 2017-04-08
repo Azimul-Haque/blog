@@ -94,9 +94,19 @@ class CommentreplyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $comment_id)
     {
-        //
+        $commentreply = Commentreply::find($comment_id);
+
+        $this->validate($request, ['commentreply'=>'required']);
+
+        $commentreply->commentreply = $request->commentreply;
+        $commentreply->save();
+
+        Session::flash('success', 'প্রতিমন্তব্য সফলভাবে হালনাগাদ করা হয়েছ।');
+
+        //redirect
+        return Redirect::back(); 
     }
 
     /**

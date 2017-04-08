@@ -79,6 +79,8 @@ class CommentsController extends Controller
 
         return view('comments.edit')->withComment($comment);
     }
+    }
+*/    
 
     public function update(Request $request, $id)
     {
@@ -89,11 +91,13 @@ class CommentsController extends Controller
         $comment->comment = $request->comment;
         $comment->save();
 
-        Session::flash('success', 'কমেন্ট সফল্ভাবে হালনাগাদ করা হয়েছ।');
+        Session::flash('success', 'মন্তব্য সফলভাবে হালনাগাদ করা হয়েছ।');
 
         //redirect
-        return redirect()->route('posts.show', [$comment->post->id]);
-    }*/
+        return Redirect::back();   
+
+    }
+
     
     // delete er somoy middleware a admin diye only ei method duita kore nite hobe
     public function delete($id)

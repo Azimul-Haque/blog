@@ -88,6 +88,17 @@
 						
 					</div>
 				</div>
+			</div><br/>
+			<div class="well">
+				Youtube ভিডিও যোগ করবার জন্যঃ <br/>
+				মূল অংশ-এর &lt;&gt; (Source code ) বাটনে ক্লিক করে HTML-এর iframe অ্যাট্রিবিউট ব্যবহার করে ইউটউব ভিডিও যোগ করুন। কোড ফরম্যাটটি হবে এরকমঃ <br/><br/>
+				<div class="panel">
+					<div  class="panel-body" style="font-family: courier !important; word-wrap: break-word !important;">
+						&lt;div class="youtibecontainer"&gt;<br/>
+							&lt;iframe src="https://www.youtube.com/embed/1234...90" frameborder="0" class="youtubeiframe"&gt;&lt;/iframe&gt;<br/>
+						&lt;/div&gt;
+					</div>
+				</div>
 			</div>
 		</div>
 		{!! Form::close() !!}

@@ -57,14 +57,16 @@ Route::post('comments/{post_id}', ['uses' => 'CommentsController@store', 'as' =>
 
 // Super Admin will have these access
 //Route::get('comments/{id}/edit', ['uses' => 'CommentsController@edit', 'as' => 'comments.edit']);
-//Route::put('comments/{id}', ['uses' => 'CommentsController@update', 'as' => 'comments.update']);
+Route::patch('comments/{id}', ['uses' => 'CommentsController@update', 'as' => 'comments.update']);
 Route::get('comments/{id}/delete', ['uses' => 'CommentsController@delete', 'as' => 'comments.delete']);
 Route::delete('comments/{id}', ['uses' => 'CommentsController@destroy', 'as' => 'comments.destroy']);
+
 Route::get('comments/{id}/report', ['uses' => 'CommentsController@report', 'as' => 'comments.report']);
 Route::put('comments/{id}', ['uses' => 'CommentsController@reportconfirm', 'as' => 'comments.reportconfirm']);
 
 // Commentreply controller
 Route::post('commentreplies/{comment_id}', ['uses' => 'CommentreplyController@store', 'as' => 'commentreplies.store']);
+Route::patch('commentreplies/{comment_id}', ['uses' => 'CommentreplyController@update', 'as' => 'commentreplies.update']);
 // the rest resource requesst will be used soon...
 // Commentreply controller
 

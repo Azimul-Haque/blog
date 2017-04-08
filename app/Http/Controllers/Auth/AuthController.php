@@ -92,11 +92,10 @@ class AuthController extends Controller
 
         Mail::send('emails.welcome', $dataMail, function ($message) use ($dataMail) {
             $message->from($dataMail['from_email']);
-            $message->sender('blog@HoTg.org', 'John Doe');
+            $message->sender('blog@humansofthakurgaon.org', 'ব্লগ | হিউম্যানস অব ঠাকুরগাঁও');
         
             $message->to($dataMail['to_email']);
             $message->cc('blog@humansofthakurgaon.org');
-            //$message->bcc('john@johndoe.com', 'John Doe');
         
             $message->replyTo($dataMail['from_email']);
             $message->subject($dataMail['subject']);        

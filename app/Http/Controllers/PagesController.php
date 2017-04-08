@@ -28,9 +28,11 @@ class PagesController extends Controller {
                                 ->where('isDeleted', '!=', '0')
                                 ->where('isPublished', '=', 'publish')
                                 ->paginate(15); // it will be 15
-        $populars = Post::orderBy('hits', 'desc')
+        $populars = Post::orderBy('id', 'desc')
+                                ->orderBy('hits', 'desc') 
                                 ->where('isDeleted', '!=', '0')
                                 ->where('isPublished', '=', 'publish')
+                                ->where('hits', '>', 100)
                                 ->take(5)
                                 ->get();                        
         $bloggers = User::orderBy('id', 'desc')->first();                        
@@ -44,10 +46,12 @@ class PagesController extends Controller {
                                 ->where('isPublished', '=', 'publish')
                                 ->take(10)
                                 ->get();
-        $mostreads = Post::orderBy('commentsandrepliestcount', 'DESC') // new version
+        $mostreads = Post::orderBy('id', 'desc') // new version
+                                ->orderBy('commentsandrepliestcount', 'desc')
                                 ->where('commentsandrepliestcount', '!=', '0')
                                 ->where('isDeleted', '!=', '0')
                                 ->where('isPublished', '=', 'publish')
+                                ->where('commentsandrepliestcount', '>', 2) // change it to 5 when popular
                                 ->take(5)
                                 ->get();
         $totalcommentreply = Commentreply::orderBy('id', 'desc')->first();                                         
@@ -90,11 +94,11 @@ class PagesController extends Controller {
 
        Mail::send('emails.contact', $data, function ($message) use ($data) {
             $message->from($data['email']);
-            $message->sender('blog@HoTg.org', 'John Doe');
+            $message->sender('blog@humansofthakurgaon.org', 'ব্লগ | হিউম্যানস অব ঠাকুরগাঁও');
         
             $message->to('blog@humansofthakurgaon.org');
         
-            $message->cc('orbachinujbuk@gmail.com', 'John Doe');
+            $message->cc('orbachinujbuk@gmail.com', 'Super Admin');
             //$message->bcc('john@johndoe.com', 'John Doe');
         
             $message->replyTo($data['email']);

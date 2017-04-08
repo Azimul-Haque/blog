@@ -37,7 +37,8 @@ class Controller extends BaseController
                                 ->where('isDeleted', '!=', '0')
                                 ->get()->unique('from_id')->take(4);
             $notifications = Notification::orderBy('id', 'desc')
-                                         ->whereBetween('getter_id', [0, Auth::user()->id])
+                                         ->where('getter_id', 0) //->whereBetween('getter_id', [0, Auth::user()->id])
+                                         ->orWhere('getter_id', Auth::user()->id)
                                          ->get()->take(4);
                     
 	    } else {
