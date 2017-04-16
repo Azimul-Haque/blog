@@ -170,7 +170,11 @@
                       @foreach($usersMandN  as $userMandN)
                         @if($messageMandN->from_id == $userMandN->id)
                           <a href="{{ url('messages/conversation/'.$userMandN->name) }}" class="navDropDownMandNa">
-                          
+                              
+                              @if($messageMandN->read == 1)
+                                <img class="img-responsive ribbon" src="{{ asset('images/new_corner_tag.png') }}">
+                              @endif
+
                               {{-- image --}}
                               @if(!$userMandN->image == NULL)
                               <img class="img-responsive img-circle navDropDownMandNimg" src="{{ asset('images/profilepicture/'.$userMandN->image) }}">

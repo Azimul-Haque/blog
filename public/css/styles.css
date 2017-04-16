@@ -375,6 +375,13 @@ img {
   margin-right: 6px;
 }
 
+.ribbon {
+  position: relative;
+  float: right;
+  height: 20%;
+  width: auto;
+}
+
 
 
 
