@@ -262,7 +262,18 @@
                 <span style="font-size: 25px;"><b>অনলাইনে আছেন</b></span><br/>
                 @foreach($users as $user)
                 @if($user->isOnline())
-                    <span style="font-size: 10px; color:#42B72A ; margin-top: -6px; margin-right: 4px;"><i class="fa fa-circle" aria-hidden="true"></i></span> <a href="{{ url('profile/'.$user->name) }}" style="text-decoration: none;">{{ $user->name }}</a><br/>
+                  <div class="online-users-list">
+                    <span class="online-icon" style=""><i class="fa fa-circle" aria-hidden="true"></i></span>
+
+                    <a href="{{ url('profile/'.$user->name) }}" style="text-decoration: none;">
+                      @if(!$user->image == NULL)
+                      <img class="img-responsive img-circle online-user" src="{{ asset('images/profilepicture/'.$user->image) }}" style="height: 50px; width: auto; border: 2px solid #bbb;">
+                      @else
+                      <img class="img-responsive img-circle online-user" src="{{ asset('images/profile.png') }}" style="height: 50px; width: auto; border: 2px solid #bbb;">
+                      @endif
+                      <span class="online-user-name">{{ $user->name }}</span>
+                    </a><br/>
+                  </div>
                 @endif
                 @endforeach
               </div>

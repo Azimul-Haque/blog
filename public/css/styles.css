@@ -333,6 +333,48 @@ img {
     height: 100%;
 }
 
+.online-users-list, .online-user {
+    display: inline-block;
+    *display: inline; /* for older IE */
+    *zoom: 1; /* for older IE */
+    vertical-align: middle;
+}
+
+.online-icon {
+    font-size: 10px; 
+    color:#42B72A ; 
+    margin-top: -6px; 
+    margin-right: 4px;
+}
+
+.online-icon, .online-user-name {
+  vertical-align: middle; 
+  display: inline;
+}
+
+.messages-MnD-button {
+    display: inline-block; 
+    position: relative; 
+}
+
+.button__badge {
+    background-color: #fa3e3e;
+    border-radius: 3px;
+    color: white;
+   
+    padding: 3px;
+    font-size: 11px;
+    
+    position: absolute; /* Position the badge within the relatively positioned button */
+    top: 0;
+    right: 0;
+}
+
+.button__badge {
+  margin-top: 3px;
+  margin-right: 6px;
+}
+
 
 
 

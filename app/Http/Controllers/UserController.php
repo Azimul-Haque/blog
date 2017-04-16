@@ -149,6 +149,7 @@ class UserController extends Controller
         $message->to_id = $request->to_id;
         $message->from_id = $request->from_id;
         $message->message = $request->message;
+        $message->read = 1;
 
         $message->save();
 
@@ -214,6 +215,7 @@ class UserController extends Controller
         $message->to_id = $request->to_id;
         $message->from_id = $request->from_id;
         $message->message = $request->message;
+        $message->read = 1;
 
         $message->save();
 
@@ -242,7 +244,10 @@ class UserController extends Controller
                                     ])
                                 ->where('isDeleted', '!=', '0')
                                 ->get();
-                                   
+
+        $read = Message::where('to_id', '=', Auth::user()->id)
+                                ->where('from_id', '=', $otherone->id)
+                                ->update(['read' => 0]);                                   
 
         return view('messages.conversation')
                     ->withMessages($messages)

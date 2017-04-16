@@ -158,8 +158,12 @@
 
             {{-- messages --}}
             <li class="dropdown">
-              <a href="/" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                <i class="fa fa-commenting-o" aria-hidden="true" style="font-size: 18px;"></i> </a>
+              <a href="/" class="dropdown-toggle messages-MnD-button" id="clickonMessage" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-commenting-o" aria-hidden="true" style="font-size: 18px;"></i>
+                @if($unread > 0)
+                  <span class="button__badge">{{ $unread }}</span> 
+                @endif
+              </a>
               <ul class="dropdown-menu navDropDownMandN">
                   @foreach($messagesMandN  as $messageMandN)
                       <li>
@@ -177,7 +181,7 @@
 
                             <span class="navDropDownMandNtext">
                               <b>{{ $userMandN->name}}</b><br/>
-                              <small>{{ date('F d, Y h:i A', strtotime($userMandN->created_at))}}</small><br/>
+                              <small>{{ date('F d, Y h:i A', strtotime($messageMandN->created_at))}}</small><br/>
                               @if(strlen($messageMandN->message)>50)
                                 {!! substr($messageMandN->message, 0, stripos($messageMandN->message, " ", stripos(strip_tags($messageMandN->message), " ")+35))."... " !!}
                               @else
@@ -190,7 +194,7 @@
                       </li>
                     <li role="separator" class="divider"></li>
                   @endforeach
-                  <li><a href="{{ url('messages') }}" class="navDropDownMandNa"><center>আরও দেখুন...</center></a></li> 
+                  <li><a href="{{ url('messages') }}" class="navDropDownMandNa"><center>আরও দেখুন...</center> </a></li> 
               </ul>
             </li>
             {{-- messages --}}

@@ -40,17 +40,23 @@ class Controller extends BaseController
                                          ->where('getter_id', 0) //->whereBetween('getter_id', [0, Auth::user()->id])
                                          ->orWhere('getter_id', Auth::user()->id)
                                          ->get()->take(4);
+                                         
+            $unread = Message::where('to_id', '=', Auth::user()->id)
+                                ->where('read', '=', 1)
+                                ->count();
                     
 	    } else {
 	    	$usersMandN = collect(new User);
             $messagesMandN = collect(new Message);
             $notifications = collect(new Notification);
+            $unread = collect(new Message);
 	    }
 
         // share with all view
 	    View::share('usersMandN', $usersMandN);
         View::share('messagesMandN', $messagesMandN);
-	   	View::share('notifications', $notifications);
+        View::share('notifications', $notifications);
+	   	View::share('unread', $unread);
 
           
     }

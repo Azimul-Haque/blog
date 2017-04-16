@@ -124,6 +124,13 @@
           </p>
 
           <br/>
+            @if (Session::has('errorException'))
+              <div class="alert alert-danger">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                {{Session::get('errorException')}}
+              </div>  
+            @endif
+          <br/>
           <a href="{{ url('/') }}" class="btn btn-sm btn-primary"><i class="fa fa-undo" aria-hidden="true"></i> ফিরে যান</a>
           <br/>
             
