@@ -20,8 +20,7 @@
 			    {title: 'Responsive', value: 'img-responsive'}
 			  ],
      		  image_dimensions: false,
-     		  extended_valid_elements : 'iframe[src|frameborder|style|scrolling|class|width|height|n
-     		  ame|align|allowfullscreen]', 
+     		  extended_valid_elements : 'iframe[src|frameborder|style|scrolling|class|width|height|name|align|allowfullscreen]', 
 		});
 	 </script>
 @endsection

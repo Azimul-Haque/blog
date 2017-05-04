@@ -40,6 +40,7 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->middleware($this->guestMiddleware(), ['except' => 'getLogout']);
+        parent::__construct();
     }
 
     /**
@@ -54,7 +55,6 @@ class AuthController extends Controller
             'name' => 'required|max:255|unique:users',
             'email' => 'required|email|max:255|unique:users',
             'phone' => 'required|max:255',
-            'fb' => 'sometimes|max:255',
             'fb' => 'sometimes|max:255',
             'blood_group' => 'required|max:255',
             'last_donated' => 'sometimes|max:255',

@@ -9,12 +9,18 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesResources;
 use VisitLog;
 use App\User;
+use App\Post;
+use App\Comment;
+use App\Commentreply;
 use App\Message;
 use App\Notification;
 use View;
 use DB;
 use Auth;
 use Carbon\Carbon;
+
+use Illuminate\Support\Facades\Cache;
+use Sarfraznawaz2005\VisitLog\Models\VisitLog as VisitLogModelC;
 
 
 
@@ -24,7 +30,21 @@ class Controller extends BaseController
     use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests;
 
     public function __construct() {
+        
+        // count visits
         VisitLog::save();
+
+        // return visits stats
+        $visitlogvisits = VisitLogModelC::orderBy('id', 'desc')->first();
+
+        // return posts info stats
+        $totalpostsforfooter = Post::orderBy('id', 'desc')->first();
+        $totalcomments = Comment::orderBy('id', 'desc')->first();
+        $totalcommentsreply = Commentreply::orderBy('id', 'desc')->first();
+        $totalcomandrepsforfooter =  $totalcomments->id + $totalcommentsreply->id;
+        $totaluserforfooter = User::orderBy('id', 'desc')->first();
+
+
 
         // set local lang to Bangla
         Carbon::setLocale('bn');
@@ -56,7 +76,11 @@ class Controller extends BaseController
 	    View::share('usersMandN', $usersMandN);
         View::share('messagesMandN', $messagesMandN);
         View::share('notifications', $notifications);
-	   	View::share('unread', $unread);
+        View::share('unread', $unread);
+        View::share('visitlogvisits', $visitlogvisits);
+        View::share('totalpostsforfooter', $totalpostsforfooter);
+        View::share('totalcomandrepsforfooter', $totalcomandrepsforfooter);
+	   	View::share('totaluserforfooter', $totaluserforfooter);
 
           
     }

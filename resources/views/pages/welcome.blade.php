@@ -254,6 +254,8 @@
                   </div>
                  {!! Form::close() !!}
                 <!-- search -->
+                
+
               </div>
             </div>
 

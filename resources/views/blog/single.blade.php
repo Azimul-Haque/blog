@@ -65,14 +65,18 @@
 
 @section('content')
 
-	<div class="row">	
-	        <div class="col-md-6 col-md-push-3">
+	<div class="row">
+		<div itemscope itemtype="http://schema.org/NewsArticle">
+		<meta itemscope itemprop="mainEntityOfPage"  itemType="https://schema.org/WebPage" itemid="https://google.com/article"/>
+			<div class="col-md-6 col-md-push-3">
 	        	<div id="forPrintPurpose">
 	        	{{-- @if(!$post->image== NULL)
 					<img class="img-responsive" src="{{ asset('images/'. $post->image) }}">
 				@endif --}}
-				<p class="postTitle mainBodyPostTitle">
-					<strong><a href="{{url('article/'.$post->slug)}}" class="postTitle">{{ $post->title }}</a></strong>
+				<p class="postTitle mainBodyPostTitle" itemprop="headline">
+					<strong><a href="{{url('article/'.$post->slug)}}" class="postTitle" itemprop="url">
+						<span itemprop="name">{{ $post->title }}</span></a>
+					</strong>
 					@if($post->featured == 'YES')
 						<small style="color: lightgrey; font-size: 18px;">নির্দেশিত প্রবন্ধ</small>
 					@endif
@@ -85,18 +89,47 @@
 	                  }
 	                }
 	              ?>
-				<a href="{{url('profile/'.$writtenBy)}}" class="">{{ $writtenBy }} </a>
+				<a href="{{url('profile/'.$writtenBy)}}" class="">
+					<span itemprop="author" itemscope itemtype="http://schema.org/Person">
+					<span itemprop="name">{{ $writtenBy }}</span> </span>
+				</a>
+
+				  <div itemprop="image" itemscope itemtype="https://schema.org/ImageObject" style="display: none;">
+				    <img src="{{ asset($image) }}"/>
+				    <meta itemprop="url" content="{{ asset($image) }}">
+				    <meta itemprop="width" content="800">
+				    <meta itemprop="height" content="800">
+				  </div>
+
+				  <div itemprop="publisher" itemscope itemtype="https://schema.org/Organization" style="display: none;">
+				    <div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
+				      <img src="http://blog.humansofthakurgaon.org/public/images/favicon.png"/>
+				      <meta itemprop="url" content="http://blog.humansofthakurgaon.org/public/images/favicon.png">
+				      <meta itemprop="width" content="600">
+				      <meta itemprop="height" content="60">
+				    </div>
+				    <meta itemprop="name" content="Blog | Humans of Thakurgaon">
+				  </div>
+				
+				<span itemprop="datePublished" content="{{ date('Y-m-dTH:i', strtotime($post->created_at))}}" style="display: none;">{{ date('Y-m-dTH:i', strtotime($post->created_at))}}</span>
+				<span itemprop="dateModified" content="{{ date('Y-m-dTH:i', strtotime($post->updated_at))}}" style="display: none;">{{ date('Y-m-dTH:i', strtotime($post->updated_at))}}</span>
+				<span itemprop="description" style="display: none;">{{ strip_tags($post->body) }}</span>
+
 				<span>
                   <i class="fa fa-calendar" aria-hidden="true"></i> {{ bn_date(date('F d, Y', strtotime($post->created_at)))}}
                   <i class="fa fa-clock-o" aria-hidden="true"></i> {{ bn_date(date('h:i a', strtotime($post->created_at)))}}
                   <span class="diffForHumans">{{ bn_date($post->created_at->diffForHumans()) }}</span>
                 </span></h5>
-				<span class="postBody">
-					{!! $post->body!!} 
-				</span><br/>
+				<span itemprop="articleBody" class="postBody fb-quotable">
+					{!! $post->body!!}
+					<!-- Quote -->
+	                	<div class="fb-quote"></div>
+	                <!-- Quote -->
+				</span>
+				<br/>
 				<span><i class="fa fa-folder-open-o" aria-hidden="true"></i> বিষয়ঃ <a href="/category/{{$post->category->name}}/">{{ $post->category->name }}</a>
 	            </span> | 
-	            <span><i class="fa fa-tags" aria-hidden="true"></i> ট্যাগসমূহঃ 
+	            <span itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating" itemref="_bestRating11"><i class="fa fa-tags" aria-hidden="true"></i> ট্যাগসমূহঃ 
 	              <?php
 	                $labels = array('default','primary','success','info','warning','danger');
 	                $i = 1;
@@ -106,7 +139,12 @@
 	                  </a>
 	                <?php $i++?>
 	              @endforeach 
-	               <span style="margin-left: 5px;">[ <i class="fa fa-eye" aria-hidden="true"></i> {{ bn_date($post->hits) }} ]</span>
+	               <span style="margin-left: 5px;">
+	               		[ <i class="fa fa-eye" aria-hidden="true"></i>
+	               			{{ bn_date($post->hits) }} 
+	               		]
+	               		<span itemprop="ratingCount" style="display: none;">{{ $post->hits }}</span> 
+	               </span>
 	               <span style="margin-left: 5px;">[ <i class="fa fa-comments" aria-hidden="true"></i> 
 						<?php $total = 0?>
 						@foreach($post->comments as $comment)
@@ -116,6 +154,7 @@
 						@endforeach
 						{{ bn_date($post->comments()->count() + $total) }}
 	               		]
+	               		<span itemprop="ratingValue" style="display: none;">{{ $post->comments()->count() + $total }}</span>
 	               	</span>
 	            </span> 
 				<span><button id="btnPrint" class="btn btn-xs btn-default"><i class="fa fa-print" aria-hidden="true"></i></button></span>
@@ -141,7 +180,16 @@
 										style='border: 0; overflow: hidden;' width="90" height="34" frameborder="none">
 									</iframe>
 					</li>
+					<li>						
+	                <!-- Save -->
+	                		<div style="margin-left: -25px !important;" class="fb-save shareLI" data-uri="{{ $url }}" data-size="small"></div>
+	                <!-- Save -->
+					</li>
 	            </ul>
+	            <i class="fa fa-paper-plane" aria-hidden="true"></i> পাঠিয়ে দিনঃ
+	            <!-- Send -->
+                	<div style="" class="fb-send" data-colorscheme="dark" data-href="http://{{ $hrefShare }}"></div>
+                <!-- Send -->
 	            {{--fb, google+, twitter share links--}}
 
 
@@ -154,6 +202,7 @@
 								$total = $total + $comment->commentreplies->count();
 							?>
 						@endforeach
+						<span id="_bestRating11" itemprop="bestRating" style="display: none;">{{ $post->comments()->count() + $total }}</span>
 						{{ bn_date($post->comments()->count() + $total) }}
 						টি মন্তব্য ও প্রতিমন্তব্য
 					</h2>
@@ -185,7 +234,8 @@
 										</span>
 										</div>
 									</div>
-									<div class="comment-content" id="commentText{{$commentNum}}">{{ $comment->comment }}
+									<div class="comment-content fb-quotable" id="commentText{{$commentNum}}" style="word-break: break-all;">
+										{{ $comment->comment }}
 									</div>
 									{{ Form::open(['route' => ['comments.update', $comment->id], 'method' => 'PATCH', 'data-parsley-validate' => '', 'id' => 'editCommentForm'.$commentNum, 'class' => 'comment-content']) }}
 
@@ -252,7 +302,9 @@
 													</span>
 												</div>
 										</div>
-										<div class="reply-content" id="commentReplyText{{$commentreply->id}}">{{ $commentreply->commentreply }}</div>
+										<div class="reply-content fb-quotable" id="commentReplyText{{$commentreply->id}}" style="word-break: break-all;">
+											{{ $commentreply->commentreply }}
+										</div>
 
 										{{ Form::open(['route' => ['commentreplies.update', $commentreply->id], 'method' => 'PATCH', 'data-parsley-validate' => '', 'id' => 'editCommentReplyForm'.$commentreply->id, 'class' => 'reply-content']) }}
 
@@ -315,11 +367,9 @@
 					</div>
 					{{ Form::close() }}
 				</div>
-			</div>   <br/>  
-
-
-            
-        </div>
+			</div>   <br/> 
+		</div>
+    </div>
 
         <div class="col-md-3 col-md-pull-6">
             <div class="panel" style="background: #6ED66E;">
@@ -421,6 +471,7 @@
               </div>
             </div>
 
+			<span id="_articleSection5" itemprop="articleSection">
             <div class="panel" style="background: #B0FCB0;">
               <div class="panel-body">
                 <span style="font-size: 25px;"><b>সর্বাধিক পঠিত</b></span>
@@ -459,12 +510,12 @@
                       </div>
                   @endforeach
               </div>
-            </div>  
+            </div>  </span>  
         </div>
       </div>	
 	</div>      
 
-
+	
 
 @endsection
 
